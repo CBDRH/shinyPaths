@@ -1,0 +1,15 @@
+Package: shinyPaths
+Title: shinyPaths
+Version: 0.0.0.9000
+Authors@R: person('Hanly', 'Mark', email = 'm.hanly@unsw.edu.au', role = c('cre', 'aut'))
+Description: Test your understanding of the backdoor path criterion.
+License: What license is it under?
+Imports: 
+    config (>= 0.3.1),
+    golem (>= 0.3.1),
+    shiny (>= 1.6.0)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+URL: https://github.com/CBDRH/shinyPaths
+BugReports: https://github.com/CBDRH/shinyPaths/issues

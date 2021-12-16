@@ -1,0 +1,179 @@
+---
+title: "shinyPaths"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{shinyPaths}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(shinyPaths)
+library(dagitty)
+library(ggdag)
+library(dplyr)
+```
+
+# Overview
+
+## Implementation
+To do
+
+### Generating a random DAG
+
+In order to generate a random DAG we use the function `dagitty::randomDAG(n, p)`. This function takes two user-defined parameters: `n` the number of nodes and `p` the connectivity (or complexity) of the resulting DAG. The function returns a `dagitty` object, that is a character string which encodes the DAG using dagitty syntax.
+
+```{r random-1}
+nodes <- 5 # Number of nodes
+connectivity <- .6 # Complexity
+
+rd1 <- dagitty::randomDAG(nodes, connectivity)
+
+is.dagitty(rd1)
+
+rd1
+
+```
+
+
+### Defining exposure and outcome variables
+
+Before considering the backdoor paths criterion we must specify one of nodes to be an exposure and one to be an outcome, as well as ensuring there is an arrow pointing from the exposure to the outcome. To make sure the resulting graph is still acyclic the outcome node must be higher than the exposure node so we can achieve this by drawing two nodes at random and coding the lower one as the exposure and the higher one as the outcome. 
+
+```{r status-1}
+
+draw <- base::sample(seq(1, nodes), 2)
+exposure <- paste0('x', min(draw))
+outcome <- paste0('x', max(draw))  
+exposure
+outcome
+
+```
+
+Having selected an exposure and outcome node, we can update the random DAG to incorporate this information. we can also take this opportunity to give the variables some standard names: X for the exposure; Y for the outcome and Z1, Z2 etc for the other nodes. 
+
+```{r status-2}
+#Assign standard names
+df1 <- data.frame(
+          oldName = paste0('x', 1:nodes)
+        ) %>% 
+          mutate(
+            exposure = oldName == exposure,
+            outcome = oldName == outcome
+            ) %>% 
+          arrange(outcome, exposure) %>% 
+          mutate(newName = c(paste0("Z", 1:(nodes-2)), "X", "Y")) %>% 
+          select(oldName, newName)
+
+df1
+
+# Rename the nodes in the random dagitty object
+rd2 <- rd1
+for (i in 1:nodes) {
+  rd2 <- gsub(df1[i, "oldName"], df1[i, "newName"], rd2)
+}
+
+rd2 <- sub("X", "X [exposure]", rd2) # Designate X as the exposure
+rd2 <- sub("Y", "Y [outcome]", rd2) # Designate Y as the outcome
+rd2 <- sub("}", "X -> Y\n}", rd2) # Ensure the DAG includes an arrow pointing from X to Y
+
+rd2
+```
+
+In order to preserve the node coordinates when plotting DAGs with the `ggdag_*` functions, it is useful to transform the `dagitty` object to a `tidy_dagitty` object. A `tidy_dagitty` object saves the encoded DAG in a tibble, and creates variables `x` and `y` defining the node coordinates when plotted. One way to achieve this is to pass the `dagitty` object to the `adjust_for()` function. 
+
+```{r status-3}
+
+rd3 <- rd2 %>% adjust_for(NULL)
+
+is.tidy_dagitty(rd3)
+
+rd3
+
+```
+
+Note that by calling `adjust_for(NULL)` we have created the variable `adjusted` in this tibble. We haven't yet adjusted for any variables, but the DAG is encoded in a format that will readily allow us to do so. We can now visualise the DAG with the exposure and outcome colour coded using the function ggdag::ggdag_status(). This is how the unsolved DAG is presented to the user. 
+
+```{r status-4, fig.dim = c(6,6)}
+
+exposureCol <- "#CDDC55"
+outcomeCol <- "#4FBAE4"
+naCol <- 'grey80'
+
+ggdag_status(rd3) + theme_dag() +
+  scale_color_manual("Status", 
+                     values = c(exposure = exposureCol, outcome = outcomeCol), 
+                     labels = c(exposure = 'Exposure', outcome = 'Outcome'),
+                     na.value = naCol)
+
+```
+
+
+### Providing clues
+
+One way to provide the user with a clue for the unsolved DAG is to highlight all of the pathways between the exposure and the outcome. This can be achieved using the function `ggdag::ggdag_paths()`. 
+
+```{r clues-1, fig.dim = c(6,6)}
+
+ggdag_paths(rd3) + 
+  theme_dag(legend.position = 'none') 
+
+```
+
+### Solving the DAG
+
+The function `dagitty::adjustmentSets()` is used to identify a minimal set of adjustment variables to identify the effect of the exposure on the outcome. The user can choose whether to solve for the total effect or the direct effect. There may be more than one valid solution, and these are presented in a list. An empty list indicates that no adjustment is necessary. 
+
+```{r solve-1, fig.dim = c(6,6)}
+
+solution <- adjustmentSets(rd2)
+solution
+
+``` 
+
+Note that the `adjustmentSets()` function is called on the original `dagitty` object, not the corresponding `tidy_dagitty` object.
+
+To reveal the solution we can adjust the `tidy_dagitty()` object for one of the valid minimal adjustment sets and plot the result using `ggdag_dag_adjusted()`
+
+```{r solve-2, fig.dim = c(6,6)}
+adjustedCol <- 'pink'
+unadjustedCol <- 'green'
+
+rd3 %>% 
+  adjust_for(solution[[1]]) %>% 
+  ggdag_adjust() +
+  theme_dag() + 
+  scale_color_manual("Status", 
+                     values = c(adjusted = adjustedCol, unadjusted = unadjustedCol), 
+                     labels = c(adjusted = 'Adjusted', unadjusted = 'Unadjusted'),
+                     na.value = naCol)+ 
+  scale_shape_manual("Status", 
+                     values = c(adjusted = 'square', unadjusted = 'circle'), 
+                     labels = c(adjusted = 'Adjusted', unadjusted = 'Unadjusted'),
+                     na.value = naCol)
+
+``` 
+
+
+
+## Sharing DAGs
+
+### Downloading
+
+### Sharing url
+
+### 
+
+
+
+
+
+
+

@@ -15,7 +15,9 @@
 
 ## Dependencies ----
 ## Add one line by package you want to add as dependency
-usethis::use_package( "thinkr" )
+usethis::use_package( "ggdag" , min_version = "0.2.3")
+usethis::use_package( "dagitty" , min_version = "0.3-1")
+usethis::use_package( "stringi" , min_version = "1.6.2")
 
 ## Add modules ----
 ## Create a module infrastructure in R/
@@ -44,8 +46,8 @@ usethis::use_test( "app" )
 # Documentation
 
 ## Vignette ----
-usethis::use_vignette("shinyPaths")
-devtools::build_vignettes()
+# usethis::use_vignette("Test1")
+# devtools::build_vignettes() # wtf just overwrote my Rmd :( 
 
 ## Code Coverage----
 ## Set the code coverage service ("codecov" or "coveralls")

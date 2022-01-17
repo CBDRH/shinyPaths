@@ -28,8 +28,8 @@ untidy_dagitty <- function(td){
   
   ts <- td$dag # The string describing the dagitty object
   
-  eVar <- stringi::str_match(ts, "\\n\\s*(.*?)\\s*\\[exposure")[[2]] # The exposure variable
-  oVar <- stringi::str_match(ts, "\\n\\s*(.*?)\\s*\\[outcome")[[2]] # THe outcome variable
+  eVar <- stringr::str_match(ts, "\\n\\s*(.*?)\\s*\\[exposure")[[2]] # The exposure variable
+  oVar <- stringr::str_match(ts, "\\n\\s*(.*?)\\s*\\[outcome")[[2]] # THe outcome variable
   
   # Use the tidy_dagitty dataframe to create "find" and "replace" character variables for each node
   df <- td$data %>% 

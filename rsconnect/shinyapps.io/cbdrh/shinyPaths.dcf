@@ -1,0 +1,13 @@
+name: shinyPaths
+title: shinyPaths
+username:
+account: cbdrh
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5440725
+bundleId: 5475479
+url: https://cbdrh.shinyapps.io/shinyPaths/
+when: 1642391547.5539
+lastSyncTime: 1642391547.55394
+asMultiple: FALSE
+asStatic: FALSE

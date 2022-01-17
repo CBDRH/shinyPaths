@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+library(ggplot2)
 library(shinyPaths)
 library(dagitty)
 library(ggdag)
@@ -161,6 +162,9 @@ rd3 %>%
 
 ``` 
 
+```{r}
+untidy_dagitty(rd3)
+```
 
 
 ## Sharing DAGs

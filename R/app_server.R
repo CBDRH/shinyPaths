@@ -6,14 +6,25 @@
 #' @noRd
 app_server <- function( input, output, session ) {
   
-  dag <- reactiveValues()
-  control <- reactiveValues()
+  rv <- reactiveValues(reveal = 0, solutionChoice = 1)
   
   observeEvent(input$run,{
-    
-    control$vars <- NULL
-
+    # Reset reactive values
+    rv$controls <- NULL
+    rv$reveal <- 0
+    rv$solutionChoice <- 1
   })
+  
+  # Reveal button logic
+  observeEvent(input$reveal, {
+    rv$reveal <- abs(rv$reveal - 1)
+  })
+  
+  
+  output$reveal <- reactive({
+    ifelse(rv$reveal, 'show', 'hide')
+  })
+  outputOptions(output, "reveal", suspendWhenHidden = FALSE)
   
   clickedVar <- reactive({
   
@@ -35,19 +46,19 @@ app_server <- function( input, output, session ) {
     
     req(clickedVar())
     
-    if (clickedVar() %in% control$vars) {
-      control$vars <- control$vars[! control$vars %in% clickedVar()]
+    if (clickedVar() %in% rv$controls) {
+      rv$controls <- rv$controls[! rv$controls %in% clickedVar()]
     }
     else {
-      control$vars <- append(control$vars, clickedVar()) %>% unique()
+      rv$controls <- append(rv$controls, clickedVar()) %>% unique()
     }
     
   })
   
   output$printSelected <- renderText({
-    if (all.equal(0, length(control$vars)) == TRUE) {
+    if (all.equal(0, length(rv$controls)) == TRUE) {
       return("No adjustment needed")
-    } else return(control$vars)
+    } else return(rv$controls)
   })
   
   dag <- eventReactive(input$run, {
@@ -55,12 +66,19 @@ app_server <- function( input, output, session ) {
   }, ignoreNULL = FALSE)
   
   dagAdj <- reactive({
-    dag() %>% adjust_for(control$vars)
+    dag() %>% adjust_for(rv$controls)
   })
   
+  dagSolution <- reactive({
+    dagitty::adjustmentSets(dag()$dag, type = 'minimal', effect = input$effect)
+  })
+  
+observeEvent(input$solutionID, {
+  rv$solutionChoice <- input$solutionID
+})
+  
   dagSolved <- reactive({
-    solution <- dagitty::adjustmentSets(dag()$dag, type = 'minimal', effect = input$effect)
-    dag() %>% adjust_for(solution[[1]])
+    dag() %>% adjust_for(dagSolution()[[rv$solutionChoice]])
   })
   
   mod_drawDag_server("drawDag_ui_1", dagAdj)
@@ -70,9 +88,10 @@ app_server <- function( input, output, session ) {
       # Calculate marks
       observeEvent(input$submit, {
 
-          submission <- control$vars
-          solution <- dagitty::adjustmentSets(dag()$dag, type = 'minimal', effect = input$effect)
-          nSol <- length(solution)
+          submission <- rv$controls
+          # solution <- dagitty::adjustmentSets(dag()$dag, type = 'minimal', effect = input$effect)
+          solution <- dagSolution()
+          nSol <- length(dagSolution())
           mark <- grader(submission, solution, nSol)
           message <- ifelse(mark, paste('Correct!', emo::ji('happy')), paste('Incorrect!', emo::ji('sad')))
 
@@ -86,7 +105,32 @@ app_server <- function( input, output, session ) {
       })
   
       
+          # Show solution options if more than 1 solution
+          output$solutionOpts <- renderUI({
+
+            req(dagSolution())
+            
+            nSets <- length(dagSolution())
+            
+            if (nSets >=2 & rv$reveal==1) {
+              # Update the possible solution to view
+              choiceSolutions <- c(paste('Solution', seq(1, nSets)))
+              radioButtons("solutionID",
+                           "There was more than one valid solution, choose which to view:",
+                           choiceNames = choiceSolutions,
+                           choiceValues = seq(1:nSets),
+                           selected = 1
+                           )
+            }
+
+            else {
+              return(NULL)
+            }
+
+          })
+      
   output$test1 <- renderText({
+    paste(length(dagSolution()), rv$solutionChoice)
   })
   
   # OLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLD

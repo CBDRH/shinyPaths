@@ -21,7 +21,8 @@ app_ui <- function(request) {
           selectInput("p", "Complexity", choices = c("Easy" = .4, "Moderate" = .6, "Difficult" = .8), selected = .6),
           radioButtons("effect", "What effect are you intersted in?", choices = c('Total' = 'total', 'Direct' = 'direct'), selected = 'total', inline = TRUE),
           strong("Selected minimal adjustment set:"),
-          textOutput("printSelected")
+          textOutput("printSelected"),
+          textOutput("test1")
         ),
 
         # Central column
@@ -32,7 +33,8 @@ app_ui <- function(request) {
                  actionButton("submit", "Submit answer", icon = icon('share-square'), width = 140),
                  actionButton("reveal", "Reveal solution", icon = icon('project-diagram'), width = 140)
                ),
-               conditionalPanel("input.reveal % 2 != 0", mod_drawDag_ui("drawDag_ui_2"))
+               htmlOutput("solutionOpts"),
+               conditionalPanel("output.reveal=='show'", mod_drawDag_ui("drawDag_ui_2"))
                ),
 
         # Output controls

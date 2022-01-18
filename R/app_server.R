@@ -56,9 +56,10 @@ app_server <- function( input, output, session ) {
   })
   
   output$printSelected <- renderText({
+    
     if (all.equal(0, length(rv$controls)) == TRUE) {
-      return("No adjustment needed")
-    } else return(rv$controls)
+      "No adjustment needed"
+    } else c('Adjust for', rv$controls)
   })
   
   dag <- eventReactive(input$run, {
@@ -94,9 +95,17 @@ observeEvent(input$solutionID, {
           nSol <- length(dagSolution())
           mark <- grader(submission, solution, nSol)
           message <- ifelse(mark, paste('Correct!', emo::ji('happy')), paste('Incorrect!', emo::ji('sad')))
-
+          
+          text <- if(mark==0){
+            "Try again"
+          } else if(mark == 1 & length(solution[[1]])==0) {
+            "No adjustment required"
+          } else if(mark == 1 & length(solution[[1]])>0) {
+            c('Adjust for', submission)
+          }
+          
           shinyalert::shinyalert(title = message,
-                                 text = NULL,
+                                 text = text,
                                  animation = FALSE,
                                  showConfirmButton = FALSE,
                                  className = "alert",
@@ -128,10 +137,37 @@ observeEvent(input$solutionID, {
             }
 
           })
+          
+          # Calculate marks
+          observeEvent(input$code, {
+
+            codeSnip <- untidy_dagitty(dag())
+            
+            showModal(modalDialog(
+              title = "Code to draw this DAG",
+              footer = modalButton("Done"),
+              splitLayout(
+              column(width = 6,
+                h3("dagitty.net"),
+                helpText(HTML(paste("Reproduce on", tags$a(href="http://www.dagitty.net/dags.html", "dagitty.net", target = "_blank")))),
+                p(HTML(gsub("\n","<br/>",codeSnip$dagitty[[1]]))),
+                rclipboard::rclipButton("copy1", "Copy to clipboard", codeSnip$dagitty, modal = TRUE, icon = icon("copy"))
+              ),
+              column(width = 6,
+                h3("R"),
+                helpText(HTML(paste("Reproduce  in R using", tags$code("dagitty"), "or", tags$code("ggdag")))),
+                p(HTML(gsub("\n","<br/>",codeSnip$r[[1]]))),
+                rclipboard::rclipButton("copy1", "Copy to clipboard", codeSnip$r, modal = TRUE, icon = icon("copy"))
+              )
+              ),
+              # p(HTML(gsub("\n","<br/>",codeSnip))),
+              easyClose = TRUE,
+              fade = TRUE
+            ))
+            
+          })        
       
-  output$test1 <- renderText({
-    paste(length(dagSolution()), rv$solutionChoice)
-  })
+  output$test1 <- renderText({})
   
   # OLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLDOLD
   # 

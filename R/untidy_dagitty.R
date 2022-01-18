@@ -33,22 +33,22 @@ untidy_dagitty <- function(td){
   
   # Use the tidy_dagitty dataframe to create "find" and "replace" character variables for each node
   df <- td$data %>% 
-    distinct(name, .keep_all = TRUE) %>% 
-    mutate(
-      status = case_when(
+    dplyr::distinct(name, .keep_all = TRUE) %>% 
+    dplyr::mutate(
+      status = dplyr::case_when(
         name == eVar ~ "exposure, ",
         name == oVar ~ "outcome, ",
         TRUE ~ ""
       ),
-      find = case_when(
+      find = dplyr::case_when(
         name == eVar ~ paste(name, "\\[exposure\\]"),
         name == oVar ~ paste(name, "\\[outcome\\]"),
         TRUE ~ name
       ),
-      replace1 = paste0(name, ' [', status, 'pos="',round(x, 2), ',', -1*round(y, 2), '"]'), # dagitty 
-      replace2 = paste0(name, ' [', status, 'pos="',round(x, 2), ',', round(y, 2), '"]') # dagitty R package
+      replace1 = paste0(name, ' [', status, 'pos="',round(x, 1), ',', -1*round(y, 1), '"]'), # dagitty 
+      replace2 = paste0(name, ' [', status, 'pos="',round(x, 1), ',', round(y, 1), '"]') # dagitty R package
     ) %>% 
-    select(find, replace1, replace2)
+    dplyr::select(find, replace1, replace2)
   
   outString1 <- outString2 <- ts
   for (i in 1:nrow(df)) {
@@ -56,5 +56,5 @@ untidy_dagitty <- function(td){
     outString2 <- sub(df[i, "find"], df[i, "replace2"], outString2)
   }
   
-  return(list(dagitty = outString1, ggdag = outString2))
+  return(list(dagitty = outString1, r = outString2))
 }

@@ -40,6 +40,7 @@ randDAG <- function(n, p){
   
   rd1 <- sub("X", "X [exposure]", rd1) # Designate X as the exposure
   rd1 <- sub("Y", "Y [outcome]", rd1) # Designate Y as the outcome
+  rd1 <- sub("X -> Y\n", "", rd1) # Ensure the DAG includes an arrow pointing from X to Y
   rd1 <- sub("}", "X -> Y\n}", rd1) # Ensure the DAG includes an arrow pointing from X to Y
   
   rd2 <- ggdag::node_status(rd1) # create tidy_dagitty object with status variable

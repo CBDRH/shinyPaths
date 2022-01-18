@@ -12,7 +12,8 @@ Imports:
     shinyalert (>= 2.0.0),
     shinipsum,
     shinyjs,
-    emo
+    emo,
+    rclipboard
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

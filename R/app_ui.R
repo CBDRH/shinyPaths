@@ -20,14 +20,16 @@ app_ui <- function(request) {
           numericInput("n", "Number of nodes", value = 5, min = 3, max = 8, step = 1),
           selectInput("p", "Complexity", choices = c("Easy" = .4, "Moderate" = .6, "Difficult" = .8), selected = .6),
           radioButtons("effect", "What effect are you intersted in?", choices = c('Total' = 'total', 'Direct' = 'direct'), selected = 'total', inline = TRUE),
-          strong("Selected minimal adjustment set:"),
-          textOutput("printSelected"),
           textOutput("test1")
         ),
 
         # Central column
         column(width = 6,
                mod_drawDag_ui("drawDag_ui_1"),
+               div(style="text-align:center;",
+                  strong("Your solution:"),
+                  textOutput("printSelected", inline = TRUE)
+               ),
                div(style="text-align:center;",
                  actionButton("run", "Generate DAG", icon = icon('sync'), width = 140),
                  actionButton("submit", "Submit answer", icon = icon('share-square'), width = 140),
@@ -97,10 +99,16 @@ golem_add_external_resources <- function(){
     ),
     shinyalert::useShinyalert(),
     shinyjs::useShinyjs(),
+    rclipboard::rclipboardSetup(),
     tags$style(
       HTML(
         ".alert {
           background-color: white; height: 120px; padding: 0px 10px 10px 10px;
+          }"
+      ),
+      HTML(
+        ".code {
+          background-color: white;
           }"
       )
     )

@@ -9,10 +9,9 @@ Imports:
     golem (>= 0.3.1),
     shiny (>= 1.6.0),
     ggdag (>= 0.2.3),
-    ggplot2,
     shinyalert (>= 2.0.0),
     shinipsum,
-    dplyr,
+    shinyjs,
     emo
 Encoding: UTF-8
 LazyData: true

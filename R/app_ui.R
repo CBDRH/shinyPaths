@@ -9,6 +9,7 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
+    shinyjs::useShinyjs(),
     navbarPage("shinyPaths",
 
   # Random mode               
@@ -26,15 +27,12 @@ app_ui <- function(request) {
         # Central column
         column(width = 6,
                mod_drawDag_ui("drawDag_ui_1"),
-               # mod_testMod_ui("testMod_ui_1"),
                div(style="text-align:center;",
-                 actionButton("run", "Generate DAG", icon = icon('refresh'), width = 140),
+                 actionButton("run", "Generate DAG", icon = icon('sync'), width = 140),
                  actionButton("submit", "Submit answer", icon = icon('share-square'), width = 140),
                  actionButton("reveal", "Reveal solution", icon = icon('project-diagram'), width = 140)
                ),
-               textOutput('test'),
-               mod_drawDag_ui("drawDag_ui_2"),
-               uiOutput("solutionOpts")
+               conditionalPanel("input.reveal % 2 != 0", mod_drawDag_ui("drawDag_ui_2"))
                ),
 
         # Output controls
@@ -96,6 +94,7 @@ golem_add_external_resources <- function(){
       app_title = 'shinyPaths'
     ),
     shinyalert::useShinyalert(),
+    shinyjs::useShinyjs(),
     tags$style(
       HTML(
         ".alert {

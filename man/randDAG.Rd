@@ -4,7 +4,7 @@
 \alias{randDAG}
 \title{randDAG}
 \usage{
-randDAG(n, p)
+randDAG(n, p, seed = 1234)
 }
 \arguments{
 \item{n}{The number of nodes}

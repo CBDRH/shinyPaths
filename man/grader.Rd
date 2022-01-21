@@ -2,9 +2,9 @@
 % Please edit documentation in R/grader.R
 \name{grader}
 \alias{grader}
-\title{Title}
+\title{grader}
 \usage{
-grader(submission, solution, nSol = 1)
+grader(submission, solution)
 }
 \arguments{
 \item{td}{}
@@ -13,12 +13,12 @@ grader(submission, solution, nSol = 1)
 
 }
 \description{
-Title
+grader
 }
 \examples{
 sol <- list(c('Z1', 'Z2'), c('Z1', 'Z3'))
 guess1 <- c('Z1')
 guess2 <- c('Z1', 'Z2')
-grader(guess1, sol, length(sol))
-grader(guess2, sol, length(sol))
+grader(guess1, sol)
+grader(guess2, sol)
 }

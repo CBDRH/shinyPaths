@@ -12,13 +12,18 @@
 #' @examples
 #' library(dagitty)
 #' dag <- randDAG(6, .5)
-randDAG <- function(n, p){
+randDAG <- function(n, p, seed=1234){
   
-  rd0 <- dagitty::randomDAG(n, p)
+  set.seed(seed)
   
-  draw <- sample(seq(1,n), 2)
-  exposure <- paste0('x', min(draw))
-  outcome <- paste0('x', max(draw))
+  p1 <- pcalg::randomDAG(n = n, prob = as.numeric(p))
+  p2 <- as(p1, "matrix")
+  p3 <- pcalg::pcalg2dagitty(p2, labels = paste0('x', 1:n))
+  rd0 <- gsub('pdag', 'dag', p3)
+  
+  draw <- sample(seq(1,n-1), 1)
+  exposure <- paste0('x', max(draw))
+  outcome <- paste0('x', draw-1)
   
   #Assign standard names
   df1 <- data.frame(

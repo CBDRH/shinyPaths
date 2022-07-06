@@ -17,7 +17,7 @@ app_ui <- function(request) {
 
         # Left hand column
         column(width = 3,
-            tippy_class("tool-tip") # Need this for tippy libraries to be loaded
+               tippy::tippy_class("tool-tip") # Need this for tippy libraries to be loaded
         ),
 
         # Central column

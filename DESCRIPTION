@@ -17,6 +17,7 @@ Imports:
     shinyjs,
     emo,
     rclipboard,
+    tippy,
     english (>= 1.2-6)
 Encoding: UTF-8
 LazyData: true

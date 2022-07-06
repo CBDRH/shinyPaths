@@ -1,0 +1,11 @@
+
+
+
+<p>A GP practice has observed that the patients coming to the clinic with a positive COVID-19 infection are more likely to be smokers. They asked the question: <em><strong>Does smoking increase the risk of being infected with COVID-19?</strong></em></p>
+<p>This potential relationship is represented in the DAG by the directed arrow from exposure X (Smoking) to outcome Y (COVID-19 infection), (X → Y).</p>
+<p>When they were discussing the analysis the team considered whether they should adjust for hospitalisation as a confounder. One doctor argued that this was important as both smokers and people infected with COVID-19 have an increased risk of being hospitalised. Another doctor argued that as hospitalisation was a consequence of both diseases rather than a possible cause that hospitalisation was not technically a confounder.</p>
+<p>When we look at the DAG we can see that both arrows point away from the exposure and outcome to the variable Z (Hospitalisation), (X → Z) and (Z ← Y). The path X → Z ← Y is a backdoor path between the exposure and outcome but importantly it is not an <em>open</em> backdoor path.</p>
+<p>This is because here Z is a special type of variable known as a ‘Collider’, and paths with uncontrolled colliders are closed. Think of it like streams of water arriving at the same point from two directions, the streams collide and the water can’t go anywhere, the pathway is blocked.</p>
+<p>If the doctors had decided to adjust for hospitalisation then they would have opened the backdoor pathway thus creating an alternate route for the association between smoking and COVID-19 infection and more importantly, introducing bias. This phenomenon is known as collider and happens more often than you would think.</p>
+<p>So, what would we control for to test the hypothesis that smoking increases the risk of being hospitalised with COVID-19? Enter your solution and check the result.</p>
+

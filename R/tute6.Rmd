@@ -1,0 +1,20 @@
+---
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tippy)
+library(shiny)
+
+# → ← I
+
+```
+
+In this example the researcher asked _**Is the amount of Screen time associated with Obesity?**_
+
+This relationship is represented in the DAG by the directed arrow from exposure X (Screen Time) to outcome Y (Obesity), X → Y.
+
+You should be able to see an example each of a confounder, a collider and a mediator in this DAG. Given what you learnt in the earlier examples, what would you condition on to estimate the **total** effect of Screen time on Obesity? 
+
+Enter your solution and check the result. 

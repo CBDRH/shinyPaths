@@ -8,11 +8,11 @@ g1 <- 'dag {
     X -> Y
 }'
 
-label1 <- c("X" = "Ice-cream sales", "Y" = "Sunburn", "Z" = "Sunshine")
+label1 <- c("X" = "Ice-cream", "Y" = "Sunburn", "Z" = "Sunshine")
 effect1 <- "total"
 correct1 <- "Controlling for sunshine will close the backdoor path between ice-cream sales and sunburn"
 
-# Example 2
+# Example 2 - Mediation total effect
 g2 <- 'dag {
     X [exposure,pos="0.000,0.000"]
     Y [outcome,pos="2.000,0.000"]
@@ -25,9 +25,23 @@ g2 <- 'dag {
 label2 <- c("X" = "Exercise", "Y" = "Mood", "Z" = "Sleep quality")
 effect2 <- "total"
 
-
-# Example 3 from https://rss.onlinelibrary.wiley.com/doi/10.1111/1740-9713.01413
+# Example 3 - Mediation direct effect
 g3 <- 'dag {
+    X [exposure,pos="0.000,0.000"]
+    Y [outcome,pos="2.000,0.000"]
+    Z [pos="1.000,1.000"]
+    X -> Z
+    Z -> Y
+    X -> Y
+}'
+
+label3 <- c("X" = "Exercise", "Y" = "Mood", "Z" = "Sleep quality")
+effect3 <- "direct"
+
+
+
+# Example 4 from https://rss.onlinelibrary.wiley.com/doi/10.1111/1740-9713.01413
+g4 <- 'dag {
     X [exposure,pos="0.000,2.000"]
     Y [outcome,pos="0.000,0.000"]
     Z [pos="1.000,1.000"]
@@ -36,11 +50,11 @@ g3 <- 'dag {
     X -> Y
 }'
 
-label3 <- c("X" = "Smoking", "Y" = "COVID-19 Infection", "Z" = "Hospitalisation")
-effect3 <- "total"
+label4 <- c("X" = "Smoking", "Y" = "COVID-19 Infection", "Z" = "Hospitalisation")
+effect4 <- "total"
 
-# Example 4 from https://academic.oup.com/aje/article/176/10/938/92975
-g4 <- 'dag {
+# Example 5 from https://academic.oup.com/aje/article/176/10/938/92975
+g5 <- 'dag {
 Z1 [pos="0.000,1.000"]
 Z2 [pos="2.000,1.000"]
 Z3 [pos="1.000,0.500"]
@@ -53,11 +67,11 @@ Z2 -> Y
 X -> Y
 }'
 
-label4 <- c("X" = "SSRI use", "Y" = "Lung cancer", "Z1" = "Depression", "Z2" = "Ever smoker", "Z3" = "Coronary disease")
-effect4 <- "total"
+label5 <- c("X" = "SSRI use", "Y" = "Lung cancer", "Z1" = "Depression", "Z2" = "Ever smoker", "Z3" = "Coronary disease")
+effect5 <- "total"
 
-# Example 5 from https://www.nature.com/articles/s41390-018-0071-3
-g5 <- 'dag {
+# Example 6 from https://www.nature.com/articles/s41390-018-0071-3
+g6 <- 'dag {
 X [exposure,pos="1.000,1.000"]
 Y [outcome,pos="3.000,1.000"]
 Z1 [pos="0.000,3.000"]
@@ -72,12 +86,30 @@ X -> Y
 Y -> Z3
 }'
 
-label5 <- c("X" = "Screen time", "Y" = "Obesity", "Z1" = "Parental education", "Z2" = "Physical activity", "Z3" = "Self harm")
-effect5 <- "total"
+label6 <- c("X" = "Screen time", "Y" = "Obesity", "Z1" = "Parental education", "Z2" = "Physical activity", "Z3" = "Self harm")
+effect6 <- "total"
 
+# Example 6 from https://www.nature.com/articles/s41390-018-0071-3
+g7 <- 'dag {
+X [exposure,pos="1.000,1.000"]
+Y [outcome,pos="3.000,1.000"]
+Z1 [pos="0.000,3.000"]
+Z2 [pos="2.000,0.000"]
+Z3 [pos="2.000,-1.000"]
+Z1 -> X
+Z1 -> Y
+X -> Z2
+X -> Z3
+Z2 -> Y
+X -> Y
+Y -> Z3
+}'
 
-# Example 6 from https://doi.org/10.1016/j.chiabu.2019.02.011
-g6 <- 'dag {
+label7 <- c("X" = "Screen time", "Y" = "Obesity", "Z1" = "Parental education", "Z2" = "Physical activity", "Z3" = "Self harm")
+effect7 <- "direct"
+
+# Example 8 from https://doi.org/10.1016/j.chiabu.2019.02.011
+g8 <- 'dag {
 Z1 [pos="1.000,2.000"]
 Z2 [pos="2.000,0.000"]
 X [exposure,pos="0.000,3.000"]
@@ -89,16 +121,30 @@ Z1 -> Y
 X -> Y
 }'
 
-label6 <- c("X" = "Childhood\nphysical abuse", "Y" = "Opioid\ndependency", "Z1" = "Chronic pain", "Z2" = "Unintentional\ninjury")
-effect6 <- "total"
+label8 <- c("X" = "Childhood\nphysical abuse", "Y" = "Opioid\ndependency", "Z1" = "Chronic pain", "Z2" = "Unintentional\ninjury")
+effect8 <- "direct"
 
 
 tuteNames <- c(
-  "Ice-cream sales and sunburn",
-  "Exercise and mood",
+  "Ice-cream and sunburn",
+  "Exercise and mood (1)",
+  "Exercise and mood (2)",
   "Smoking and COVID19 hospitalisation",
   "SSRI Use and lung cancer",
-  "Screen time and obesity",
+  "Screen time and obesity (1)",
+  "Screen time and obesity (2)",
   "Childhood abuse and opioid dependency"
 )
+
+tuteHeaders <- c(
+  "Ice-cream 🍦and Sunburn ☀️- An example of confounding",
+  "Exercise 🏃and mood 🙂 - An example of mediation",
+  "Exercise 🏃and mood 🙂 - Direct effects in the presence of mediation",
+  "Smoking 🚬 and COVID-19 hospitalisation 🏥 - A collider example",
+  "SSRI use 💊 and lung cancer 🫁 - an example of M-bias",
+  "Screen time 💻 and obesity 🍟 - Total effect",
+  "Screen time 💻 and obesity 🍟 - Direct effect",
+  "Childhood abuse and opioid dependency"
+)
+
 nExamples <- length(tuteNames)

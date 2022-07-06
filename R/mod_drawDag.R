@@ -12,44 +12,58 @@
 mod_drawDag_ui <- function(id){
   ns <- NS(id)
   tagList(
-    plotOutput(ns("plot"), click = "plotClick"),
-    tags$div(style="text-align:right;", 
-        tags$div(style="display:inline-block",title="Download as .png", downloadButton(ns("download"), NULL, class = "download")),
-        tags$div(style="display:inline-block",title="Get the code", actionButton(ns("code"), NULL, icon = icon('code'), class = "download"))
-        )
+    tags$div(style="text-align:right;",
+      tags$div(style="display:inline-block;",title="Download as .png", downloadButton(ns("download"), NULL, class = "download"))
+    ),
+      plotOutput(ns("plot"), click = "plotClick")
     )
 }
     
 #' drawDag Server Functions
 #'
 #' @noRd 
-mod_drawDag_server <- function(id, dag, label = 0, colliderlines = 0){
+mod_drawDag_server <- function(id, dag, n, pid, label = 0, colliderlines = 0){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
         
         dagPlot <- reactive({
           
+          validate(
+            need(n() >2 & n() <9, "The number of nodes should be between 3 and 8"),
+            need(is.integer(pid())==TRUE & pid()>=100 & pid()<=999, "The daggle id should be an integer between 100 and 999")
+          )
+          
           p <- dag() %>% 
             node_status() %>% # Need to refresh node status here in case adjustment has added new records to the tidy_dagitty data object
-            ggplot(aes(x = x, y = y, xend = xend, yend = yend, fill = status, shape = adjusted)) +
-            geom_dag_point(aes(color = adjusted)) +
+            mutate(col = factor(case_when(status=='exposure' ~ 1, 
+                                          status=='outcome' ~ 2, 
+                                          adjusted=='adjusted' ~ 3, 
+                                          adjusted=='unadjusted' ~ 4),
+                                levels = 1:4,
+                                labels = c('exposure', 'outcome', 'adjusted', 'unadjusted')
+            )) %>% 
+            ggplot(aes(x = x, y = y, xend = xend, yend = yend, fill = col, shape = adjusted)) +
+            geom_dag_point(aes(color = col)) +
             geom_dag_edges(arrow_directed = grid::arrow(length = grid::unit(10, "pt"), type = "closed")) +
             geom_dag_text() +
             theme_dag(legend.position = 'bottom') +
-            scale_adjusted() +
-            guides(fill = guide_legend(override.aes = list(color = c(exposureCol, outcomeCol)))) +
             scale_fill_manual(NULL,
-                              values = c('exposure' = exposureCol, 'outcome' = outcomeCol),
-                              labels = c('exposure' = 'Exposure', 'outcome' = 'Outcome'),
+                              values = c('exposure' = exposureCol, 'outcome' = outcomeCol, 'adjusted' = adjustedCol, 'unadjusted' = unadjustedCol),
+                              labels = c('exposure' = 'Exposure', 'outcome' = 'Outcome', 'adjusted' = "Adjusted", 'unadjusted' = "Unadjusted"),
                               na.value = naCol) +
-            scale_color_manual(NULL, guide = 'none',
-                               values = c('adjusted' = 'gray20', 'unadjusted' = 'white')) +
-            scale_shape_manual(NULL, guide = 'none',
-                               values = c(unadjusted = 21, adjusted = 22))  
+            scale_color_manual(NULL,
+                               values = c('exposure' = exposureCol, 'outcome' = outcomeCol, 'adjusted' = adjustedCol, 'unadjusted' = unadjustedCol),
+                               labels = c('exposure' = 'Exposure', 'outcome' = 'Outcome', 'adjusted' = "Adjusted", 'unadjusted' = "Unadjusted"),
+                               na.value = naCol) +
+            scale_shape_manual(NULL,
+                               values = c('exposure' = 21, 'outcome' = 21, 'adjusted' = 22, 'unadjusted' = 21),
+                               labels = c('exposure' = 'Exposure', 'outcome' = 'Outcome', 'adjusted' = "Adjusted", 'unadjusted' = "Unadjusted"),
+                               na.value = naCol) 
+          
           
           # Add label if one is defined
           if (label == 1) {
-            p <- p + geom_dag_label_repel(aes(label = label, fill = status), show.legend = FALSE, box.padding = 4, segment.color = 'grey80')
+            p <- p + geom_dag_label_repel(aes(label = label, fill = col), show.legend = FALSE, box.padding = 4, segment.color = 'grey80')
           }
           
           # Add collider lines if requested
@@ -62,7 +76,7 @@ mod_drawDag_server <- function(id, dag, label = 0, colliderlines = 0){
     
         # Render the plot
         output$plot <- renderPlot({
-          req(dagPlot())
+          req(dagPlot)
           dagPlot()
           })
         
@@ -76,33 +90,6 @@ mod_drawDag_server <- function(id, dag, label = 0, colliderlines = 0){
           }
         )
         
-        
-      # Make the code available on click
-      observeEvent(input$code, {
-        
-        codeSnip <- untidy_dagitty(dag())
-        
-        showModal(modalDialog(
-          title = "Code to draw this DAG",
-          footer = modalButton("Done"),
-          splitLayout(
-            column(width = 6,
-                   h3("dagitty.net"),
-                   helpText(HTML(paste("Reproduce on", tags$a(href="http://www.dagitty.net/dags.html", "dagitty.net", target = "_blank")))),
-                   p(HTML(gsub("\n","<br/>",codeSnip$dagitty[[1]]))),
-                   rclipboard::rclipButton("copy1", "Copy to clipboard", codeSnip$dagitty, modal = TRUE, icon = icon("copy"))
-            ),
-            column(width = 6,
-                   h3("R"),
-                   helpText(HTML(paste("Reproduce  in R using", tags$code("dagitty"), "or", tags$code("ggdag")))),
-                   p(HTML(gsub("\n","<br/>",codeSnip$r[[1]]))),
-                   rclipboard::rclipButton("copy2", "Copy to clipboard", codeSnip$r, modal = TRUE, icon = icon("copy"))
-            )
-          ),
-          fade = TRUE
-        ))
-      })  
-      
   })
 }
     
@@ -111,3 +98,22 @@ mod_drawDag_server <- function(id, dag, label = 0, colliderlines = 0){
     
 ## To be copied in the server
 # mod_drawDag_server("drawDag_ui_1")
+
+
+#' mod_drawDag test Function
+#'
+#' @noRd 
+test_drawDag <- function() {
+  ui <- fluidPage(
+    mod_drawDag_ui('dag1')
+  )
+  server <- function(input, output, session) {
+    
+    d <- randDAG(4, .6)
+    
+    mod_drawDag_server('dag1', dag = d, n = 4)
+    
+  }
+  
+  shinyApp(ui, server)  
+}

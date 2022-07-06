@@ -1,7 +1,8 @@
 # Define colors
 exposureCol <- "#CDDC55"
 outcomeCol <- "#4FBAE4"
-adjustedCol <- "seagreen"
-unadjustedCol <- "pink"
+adjustedCol <- "#FFB5C2"
+unadjustedCol <- "grey80"
 naCol <- 'grey80'
-s1 <- round(runif(1)*10000)
+s1 <- as.integer(100 + runif(1)*900)
+encouragementList <- c(rep("Well done!", 100), rep("Good job!", 100), rep("Nice work!", 100), rep("You did it!", 100), "Bejasus!", "Begorrah!", "Hit him again, he's no relation!")

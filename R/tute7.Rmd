@@ -1,0 +1,14 @@
+---
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tippy)
+library(shiny)
+
+# → ← I
+
+```
+
+Considering the same example, what would you adjust for to estimate the **direct** effect of Screen time on Obesity? 

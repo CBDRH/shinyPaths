@@ -1,0 +1,24 @@
+---
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tippy)
+library(shiny)
+
+# → ←  
+
+```
+
+Professor Tranh noticed that despite smoking rates decreasing over the last 4 decades the lung cancer rate had not declined. She wondered if there could be other causes of lung cancer and decided to test the hypothesis that maybe the increase in Selective Serotonin Reuptake Inhibitors (SSRIs) use could explain the lung cancer rate. Her research question was: _**Do SSRIs increase the risk of developing lung cancer?**_ 
+
+This potential relationship is represented in the DAG by the directed arrow from exposure X (SSRI use) to outcome Y (Lung Cancer), X → Y.
+
+SSRIs are prescribed to treat depression (Z1 → X) and smoking is a leading cause of lung cancer (Z2 → Y). Professor Tranh had also read articles suggesting that depression had an effect on coronary disease (Z1 → Z3), as did smoking (Z2 → Z3). 
+
+The resulting DAG has one backdoor path: X ← Z1 → Z3 ← Z2 → Y
+
+What should Professor Tranh adjust for in her analysis to identify the total effect of SSRI use on lung cancer? 
+
+Enter your solution and check the result. 

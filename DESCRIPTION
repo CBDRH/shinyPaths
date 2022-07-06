@@ -17,7 +17,7 @@ Imports:
     shinyjs,
     emo,
     rclipboard,
-    periscope
+    english (>= 1.2-6)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

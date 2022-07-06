@@ -1,0 +1,56 @@
+.alert {
+  background-color: white; 
+  padding: 0px 10px 10px 10px;
+}
+
+.code {
+  background-color: white;
+}
+
+
+.download {
+  border-color: white; 
+  color: #ccc;
+}
+
+.download2 {
+  border-color: white; 
+  background-color: white; 
+  color: #1DA1F2;
+}
+
+
+.download2:hover {
+  border-color: #1DA1F2; 
+  background-color: #ECF4FC; 
+  color: #1DA1F2;
+}
+
+.navbar-nav {
+  float: none !important;
+}
+.navbar-nav > li:nth-child(n+3) {
+  float: right;
+}
+
+.twitter-share-button {
+  background-color: #1DA1F2; /* Twitter Blue */
+  color: white;
+  padding: 6px 0px;
+  text-align: center;
+  width: 140px;
+}
+
+.myHr {
+  background-color: #eee;
+  height: 1px;
+  border: 0;
+}
+
+.codeBlock {
+  padding: 5px;
+  width: fit-content;
+  background-color: #f8f8f8;
+  font-family: Monospace;
+  display: flex;
+}

@@ -265,7 +265,7 @@ app_server <- function( input, output, session ) {
     dag2() %>% adjust_for(rv$controls)
   })
 
-  dagSolution1 <- eventReactive(input$reveal | input$submit, {
+  dagSolution1 <- reactive({
     dagitty::adjustmentSets(dag1()$dag, type = 'minimal', effect = rv$effect)
   })
   
@@ -409,6 +409,7 @@ observeEvent(input$submit, {
                             div(style = "text-align: center;", tagList(
                                  text = learnr::random_praise(),
                                  br(),
+                                 br(),
                                  actionButton("run2", "Generate DAG", icon = icon('sync'), width = 140, class="btn btn-default"),
                                  actionButton("link2", "Get url", icon = icon('link'), width = 140, class="btn btn-default"),
                                  tags$a(href=twitterLink(), "Share", class="btn btn-default twitter-share-button", icon("twitter"), target = "_blank")
@@ -516,7 +517,7 @@ observeEvent(input$submit2, {
     text <- if (length(dagSolution1()[[1]]) == 0) {
       "No adjustment necessary!"
     } else {
-      knitr::combine_words(sort(dagSolution1()[[rv$solutionChoice]]))
+      paste("Adjust for", knitr::combine_words(sort(dagSolution1()[[rv$solutionChoice]])))
     }
     
     tagList(
@@ -526,10 +527,17 @@ observeEvent(input$submit2, {
     
   })
 
+  # Update contents of reactive before modal is opened
+  outputOptions(output, "solutionOpts", suspendWhenHidden = FALSE)
+  outputOptions(output, "solutionText", suspendWhenHidden = FALSE)
+  
   # Reveal solution on click
   observeEvent(input$reveal, {
     
     req(dagSolution1(), rv$solutionChoice)
+    
+    grDevices::quartz.options(width = 8, height = 6,
+                              pointsize = 10)
     
     showModal(modalDialog(
       title = HTML(paste(icon('project-diagram'), 'Solution')),
@@ -611,7 +619,7 @@ observeEvent(input$submit2, {
     text <- if (length(dagSolution2()[[1]]) == 0) {
       "No adjustment necessary!"
     } else {
-      knitr::combine_words(sort(dagSolution2()[[1]]))
+      paste("Adjust for", knitr::combine_words(sort(dagSolution2()[[1]])))
     }
     # 
     showModal(modalDialog(

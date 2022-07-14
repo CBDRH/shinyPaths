@@ -92,6 +92,8 @@ mod_drawDag_server <- function(id, did, dag, n, pid, label = 0, colliderlines = 
           }
         )
         
+        # Update contents of reactive before modal is opened
+        outputOptions(output, "plot", suspendWhenHidden = FALSE)
   })
 }
     

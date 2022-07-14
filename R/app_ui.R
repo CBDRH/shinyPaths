@@ -40,7 +40,7 @@ app_ui <- function(request) {
                br(),
                hr(class = 'myHr'),
                tags$div(style="text-align:center;",
-                  strong("Your answer:"),
+                  strong("Your solution:"),
                   textOutput("printSelected", inline = TRUE)
                ),
                hr(class = 'myHr'),

@@ -306,7 +306,7 @@ observeEvent(input$solutionID, {
                h3("dagitty.net"),
                hr(),
                helpText(HTML(paste("Reproduce on", tags$a(href="http://www.dagitty.net/dags.html", "dagitty.net", target = "_blank")))),
-               rclipboard::rclipButton("copy1", "Copy to clipboard", codeSnip$dagitty, modal = TRUE, icon = icon("copy")),
+               rclipboard::rclipButton("copy1", "Copy and close", codeSnip$dagitty, modal = TRUE, icon = icon("copy")),
                br(), br(),
                tags$div(class = 'codeBlock', HTML(gsub("\n","<br/>",codeSnip$dagitty[[1]])))
                
@@ -315,7 +315,7 @@ observeEvent(input$solutionID, {
                h3("R"),
                hr(),
                helpText(HTML(paste("Reproduce  in R using", tags$code("dagitty"), "or", tags$code("ggdag")))),
-               rclipboard::rclipButton("copy2", "Copy to clipboard", codeSnip$r, modal = TRUE, icon = icon("copy")),
+               rclipboard::rclipButton("copy2", "Copy and close", codeSnip$r, modal = TRUE, icon = icon("copy")),
                br(), br(),
                tags$div(class = 'codeBlock',HTML(gsub("\n","<br/>",codeSnip$r[[1]])))
                
@@ -325,6 +325,16 @@ observeEvent(input$solutionID, {
       fade = TRUE
     ))
   })  
+  
+  # Close modal when code is copied
+  observeEvent(input$copy1, {
+    removeModal()
+  })
+  
+  # Close modal when code is copied
+  observeEvent(input$copy2, {
+    removeModal()
+  })
   
   url <- reactive({
     paste0('https://cbdrh.shinyapps.io/daggle/?_values_&id=', rv$id)
@@ -342,7 +352,7 @@ observeEvent(input$solutionID, {
       footer = modalButton("Done"),
       div(style="color:#4FBAE4; background-color:white;", url()),
       br(),
-      rclipboard::rclipButton("copy3", "Copy to clipboard", url(), modal = TRUE, icon = icon("copy")),
+      rclipboard::rclipButton("copy3", "Copy and close", url(), modal = TRUE, icon = icon("copy")),
       easyClose = TRUE,
       fade = TRUE
     ))
@@ -355,11 +365,21 @@ observeEvent(input$solutionID, {
       footer = modalButton("Done"),
       div(style="color:#4FBAE4; background-color:white;", url()),
       br(),
-      rclipboard::rclipButton("copy4", "Copy to clipboard", url(), modal = TRUE, icon = icon("copy")),
+      rclipboard::rclipButton("copy4", "Copy and close", url(), modal = TRUE, icon = icon("copy")),
       easyClose = TRUE,
       fade = TRUE
     ))
   })  
+  
+  # Close modal when code is copied
+  observeEvent(input$copy3, {
+    removeModal()
+  })
+  
+  # Close modal when code is copied
+  observeEvent(input$copy4, {
+    removeModal()
+  })
   
   # Tweet on click
   eventReactive(input$tweet, {

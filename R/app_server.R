@@ -285,10 +285,10 @@ observeEvent(input$solutionID, {
     dag2() %>% adjust_for(dagSolution2()[[1]])
   })
   
-  mod_drawDag_server("drawDag_ui_1", dagAdj1, n = reactive(rv$n), pid = reactive(rv$pid)) # Random DAG
-  mod_drawDag_server("drawDag_ui_2", dagSolved1, n = reactive(rv$n), pid = reactive(rv$pid), colliderlines = 1) # Random DAG solution
-  mod_drawDag_server("drawDag_ui_3", dagAdj2, n = reactive(5), pid = reactive(rv$pid), label = 1) # Tutorial DAG
-  mod_drawDag_server("drawDag_ui_4", dagSolved2, n = reactive(5), pid = reactive(rv$pid), label = 1) # Tutorial DAG solution
+  mod_drawDag_server("drawDag_ui_1", dagAdj1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid)) # Random DAG
+  mod_drawDag_server("drawDag_ui_2", dagSolved1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), colliderlines = 1) # Random DAG solution
+  mod_drawDag_server("drawDag_ui_3", dagAdj2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1) # Tutorial DAG
+  mod_drawDag_server("drawDag_ui_4", dagSolved2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1) # Tutorial DAG solution
 
   # Make the code available on click
   observeEvent(input$code, {

@@ -23,7 +23,7 @@ mod_drawDag_ui <- function(id){
 #' drawDag Server Functions
 #'
 #' @noRd 
-mod_drawDag_server <- function(id, dag, n, pid, label = 0, colliderlines = 0){
+mod_drawDag_server <- function(id, did, dag, n, pid, label = 0, colliderlines = 0){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
         
@@ -85,7 +85,7 @@ mod_drawDag_server <- function(id, dag, n, pid, label = 0, colliderlines = 0){
         # Download the current
         output$download <- downloadHandler(
           filename = function() {
-            "dag.png"
+            paste0("daggle-",did(), ".png")
           },
           content = function(file) {
             ggsave(file, plot = dagPlot(), device = "png")

@@ -51,10 +51,6 @@ app_server <- function( input, output, session ) {
 
     rv$id <- as.numeric(paste0(aID, bID, cID, dID))
   })
-  
-  output$test <- renderUI({
-    dagSolved2()[[1]]$adjusted
-  })
 
   
   # Show settings on click
@@ -68,7 +64,7 @@ app_server <- function( input, output, session ) {
     updateRadioButtons(session, 'effect', selected = rv$effect)
     
     showModal(modalDialog(
-      title = "Settings",
+      title = HTML(paste(icon('cog'), "Settings")),
       numericInput("n", "Number of nodes", value = 5, min = 3, max = 8, step = 1),
       selectInput("p", "Complexity", choices = c("Easy" = .4, "Moderate" = .6, "Difficult" = .8), selected = .6),
       numericInput("pid", "Puzzle ID", NULL, step = 1, min = 100, max = 999),
@@ -113,18 +109,20 @@ app_server <- function( input, output, session ) {
   observeEvent(input$instructions, {
     
     showModal(modalDialog(
-      title = "How to play",
-      p(HTML(paste0("The aim is to identify a minimal adjustment set to identify the effect of an exposure ", 
-                   span(style = "color: black; background-color:white; font-weight: bold;", "X"),
-                   " on an outcome", 
-                   span(style = "color: black; background-color:white; font-weight: bold;", "Y"), "."
-                   ))), 
+      title = HTML(paste(icon('question-circle'), "How to play")),
+      HTML(paste("The aim is to identify a minimal adjustment set to identify the effect of an exposure ", 
+                   tags$span(class='xNode', "X"),
+                   "on an outcome", 
+                   tags$span(class='yNode', "Y"), "."
+                   )), 
 
       p("Click or tap on a node to add that variable to the adjustment list. Click or tap on an adjusted variable to remove it from the list."),
       
-      p(HTML(paste("To estiamte the total effect, a minimal adjusmtne set must close any backdoor paths between X and Y. To estimate the direct effect you must also control for mediating variables between X and Y." 
-        
-      ))),
+      p("To estimate the total effect, a minimal adjusment set must close any open backdoor paths between X and Y. To estimate the direct effect you must also control for mediating variables between X and Y." ),
+      
+      p('To check if a path is closed, split the path up into consecutive triplets and examine each triplet. If any triplet is closed the whole path is closed'),
+      
+      tags$img(class="center", src="www/dag-examples.png"),
       
       p(HTML(paste("Click on the cog icon", span(style = "color: #ccc; font-weight: bold;", icon('cog')), "to change the number of nodes, the DAG complexity or the effect of interest
                    (either the ", span(style = "color: black; background-color:white; font-weight: bold;", "total"), "effect or the",
@@ -138,7 +136,6 @@ app_server <- function( input, output, session ) {
       fade = TRUE
     ))
   })  
-  
   
   # Close instructions modal
   observeEvent(input$closeInstructions, {
@@ -288,9 +285,6 @@ observeEvent(input$solutionID, {
     dag2() %>% adjust_for(dagSolution2()[[1]])
   })
   
-  output$test <- renderText({
-    paste(dagSolution2()[[1]])
-  })
   mod_drawDag_server("drawDag_ui_1", dagAdj1, n = reactive(rv$n), pid = reactive(rv$pid)) # Random DAG
   mod_drawDag_server("drawDag_ui_2", dagSolved1, n = reactive(rv$n), pid = reactive(rv$pid), colliderlines = 1) # Random DAG solution
   mod_drawDag_server("drawDag_ui_3", dagAdj2, n = reactive(5), pid = reactive(rv$pid), label = 1) # Tutorial DAG
@@ -302,7 +296,7 @@ observeEvent(input$solutionID, {
     codeSnip <- untidy_dagitty(dagAdj1())
     
     showModal(modalDialog(
-      title = "Code to draw this DAG",
+      title = HTML(paste(icon('code'), "Code to draw this DAG")),
       footer = modalButton("Done"),
       splitLayout(
         column(width = 6,
@@ -351,7 +345,7 @@ observeEvent(input$solutionID, {
   observeEvent(input$link, {
 
     showModal(modalDialog(
-      title = "daggle url",
+      title = HTML(paste(icon('link'), "URL link to this daggle")),
       footer = modalButton("Done"),
       div(style="color:#4FBAE4; background-color:white;", url()),
       br(),
@@ -538,7 +532,7 @@ observeEvent(input$submit2, {
     req(dagSolution1(), rv$solutionChoice)
     
     showModal(modalDialog(
-      title = 'Solution',
+      title = HTML(paste(icon('project-diagram'), 'Solution')),
       tagList(
         htmlOutput("solutionOpts"),
         htmlOutput("solutionText"),

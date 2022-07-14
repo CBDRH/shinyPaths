@@ -8,7 +8,7 @@
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom dplyr mutate case_when
-#' @importFrom ggplot2 ggplot aes ggproto guides guide_legend scale_color_manual scale_shape_manual scale_fill_manual ggsave
+#' @importFrom ggplot2 ggplot aes ggproto guides guide_legend scale_color_manual scale_shape_manual scale_fill_manual ggsave theme
 #' @importFrom ggdag ggdag adjust_for geom_dag_point geom_dag_edges geom_dag_collider_edges geom_dag_text theme_dag geom_dag_label_repel scale_adjusted dag_label node_status
 mod_drawDag_ui <- function(id){
   ns <- NS(id)
@@ -48,6 +48,7 @@ mod_drawDag_server <- function(id, dag, n, pid, label = 0, colliderlines = 0){
             geom_dag_edges(arrow_directed = grid::arrow(length = grid::unit(10, "pt"), type = "closed")) +
             geom_dag_text() +
             theme_dag(legend.position = 'bottom') +
+            theme(legend.key.size = grid::unit(1, 'cm')) +
             scale_fill_manual(NULL,
                               values = c('exposure' = exposureCol, 'outcome' = outcomeCol, 'adjusted' = adjustedCol, 'unadjusted' = unadjustedCol),
                               labels = c('exposure' = 'Exposure', 'outcome' = 'Outcome', 'adjusted' = "Adjusted", 'unadjusted' = "Unadjusted"),

@@ -63,6 +63,7 @@
   height: 22px;
   border-radius: 50%;
   vertical-align:middle;
+  text-align: center;
 }
 
 .yNode {
@@ -73,6 +74,7 @@
   height: 22px;
   border-radius: 50%;
   vertical-align:middle;
+  text-align: center;
 }
 
 .center {

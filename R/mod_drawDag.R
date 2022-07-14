@@ -70,7 +70,7 @@ mod_drawDag_server <- function(id, dag, n, pid, label = 0, colliderlines = 0){
           
           # Add collider lines if requested
           if (colliderlines == 1) {
-            p <- p + geom_dag_collider_edges(color = 'pink')
+            p <- p + geom_dag_collider_edges(color = 'pink', show.legend = FALSE)
           }
           return(p)
           

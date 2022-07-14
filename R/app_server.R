@@ -110,7 +110,7 @@ app_server <- function( input, output, session ) {
     
     showModal(modalDialog(
       title = HTML(paste(icon('question-circle'), "How to play")),
-      HTML(paste("The aim is to identify a minimal adjustment set to identify the effect of an exposure ", 
+      HTML(paste("The aim is to identify a minimal adjustment set to identify the effect of an exposure", 
                    tags$span(class='xNode', "X"),
                    "on an outcome", 
                    tags$span(class='yNode', "Y"), "."
@@ -448,7 +448,7 @@ output$done <- renderUI({
 })
 
 
-# Check solutio  in tutorial mode
+# Check solution in tutorial mode
 observeEvent(input$submit2, {
 
   submission <- rv$controls
@@ -539,11 +539,16 @@ observeEvent(input$submit2, {
         mod_drawDag_ui("drawDag_ui_2")
       ),
       easyClose = TRUE,
-      fade = TRUE
+      fade = TRUE,
+      footer = tagList(div(style = "text-align:right;", actionButton("closeSolution", "Got it", icon = icon('thumbs-up'))))
     ))
     
   })
   
+  # Close solution modal on click
+  observeEvent(input$closeSolution, {
+    removeModal()
+  })
           
   ###########################        
   ## Tutorial server logic ##        
@@ -608,9 +613,9 @@ observeEvent(input$submit2, {
     } else {
       knitr::combine_words(sort(dagSolution2()[[1]]))
     }
-    # text <- shinipsum::random_text(nwords=10)
+    # 
     showModal(modalDialog(
-      title = 'Solution',
+      title = HTML(paste(icon('project-diagram'), 'Solution')),
       tagList(
         h4(HTML((paste("Minimal adjustment sets to estimate the",
                        tags$strong(eval(as.name(paste0("effect", input$tuteID)))),
@@ -619,12 +624,16 @@ observeEvent(input$submit2, {
         mod_drawDag_ui("drawDag_ui_4")
       ),
       easyClose = TRUE,
-      fade = TRUE
+      fade = TRUE, 
+      footer = tagList(div(style = "text-align:right;", actionButton("closeSolution2", "Got it", icon = icon('thumbs-up'))))
     ))
 
   })
 
-
+  # Close tutorial solution modal on click
+  observeEvent(input$closeSolution2, {
+    removeModal()
+  })
   
   # Bookmarking
   # Exclude certain parameters from bookmark

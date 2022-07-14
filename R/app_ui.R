@@ -98,7 +98,7 @@ app_ui <- function(request) {
 
 
   # About section
-  tabPanel(NULL, icon = icon('info-circle'), p("page under construction"))
+  tabPanel(NULL, icon = icon('info-circle'), p("Hidden for peer review"))
   
     )
 )

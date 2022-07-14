@@ -54,3 +54,23 @@
   font-family: Monospace;
   display: flex;
 }
+
+.xNode {
+  display: inline-block;
+  background-color: #CDDC55;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  vertical-align:middle;
+}
+
+.yNode {
+  display: inline-block;
+  background-color: #4FBAE4;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  vertical-align:middle;
+}

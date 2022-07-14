@@ -153,7 +153,10 @@ app_server <- function( input, output, session ) {
     req(rv$effect)
     
     effect <- rv$effect
-    text <- HTML(paste("Select a minimal adjustment set to identify the", tags$strong(effect), "effect of X on Y"))
+    text <- HTML(paste("Select a minimal adjustment set to identify the", tags$strong(effect), "effect of", 
+                       tags$span(class = 'xNode', "X"), "on", 
+                       tags$span(class = 'yNode', "Y")
+                       ))
     
     helpText(text)
     

@@ -80,6 +80,7 @@ app_ui <- function(request) {
                     strong("Your solution:"),
                     textOutput("printSelected2", inline = TRUE)
                 ),
+                br(),
                 tags$div(style = 'text-align: center;',
                          actionButton('previous', NULL, icon = icon("arrow-left"), width = 68),
                          actionButton('advance', NULL, icon = icon("arrow-right"), width = 68),

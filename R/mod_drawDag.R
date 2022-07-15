@@ -48,7 +48,7 @@ mod_drawDag_server <- function(id, did, dag, n, pid, label = 0, colliderlines = 
             geom_dag_edges(arrow_directed = grid::arrow(length = grid::unit(10, "pt"), type = "closed")) +
             geom_dag_text() +
             theme_dag(legend.position = 'bottom') +
-            theme(legend.key.size = grid::unit(1, 'cm')) +
+            guides(color = guide_legend(override.aes = list(size = 8))) +
             scale_fill_manual(NULL,
                               values = c('exposure' = exposureCol, 'outcome' = outcomeCol, 'adjusted' = adjustedCol, 'unadjusted' = unadjustedCol),
                               labels = c('exposure' = 'Exposure', 'outcome' = 'Outcome', 'adjusted' = "Adjusted", 'unadjusted' = "Unadjusted"),
@@ -78,7 +78,7 @@ mod_drawDag_server <- function(id, did, dag, n, pid, label = 0, colliderlines = 
     
         # Render the plot
         output$plot <- renderPlot({
-          req(dagPlot)
+          req(dagPlot())
           dagPlot()
           })
         

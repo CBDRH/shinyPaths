@@ -19,7 +19,7 @@ In this example, our DAG reflects the assumption that there are two ways that Ex
 
 ```{r}
 tags$p(
-"If we are interested in the", tags$span(style="color:#4FBAE4; font-weight:bold", tippy('total effect', "The total effect of an exposure on an outcome includes direct effects like X → Y and indirect effects that pass thorugh one or more mediators, like X → Z → Y")) , "of Exercise on Mood regardless of which pathways it occurs through then we should make sure the path including sleep quality remains open.")
+"If we are interested in the", tags$span(style="color:#4FBAE4; font-weight:bold", tippy('total effect', tags$p(class='helpBox', "The total effect of an exposure on an outcome includes direct effects like X → Y and indirect effects that pass thorugh one or more mediators, like X → Z → Y"))) , "of Exercise on Mood regardless of which pathways it occurs through then we should make sure the path including sleep quality remains open.")
 ```
 
 Enter your solution to identify the **total** effect of exercise on mood.

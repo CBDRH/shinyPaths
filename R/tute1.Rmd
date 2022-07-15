@@ -15,7 +15,7 @@ In this example, an emergency department doctor noted that patients presenting w
 
 ```{r}
 tags$p(
-"This hypothetical relationship is represented in the directed acyclic graph (DAG) by the", tags$span(style="color:#4FBAE4; font-weight:bold", tippy('directed path', "A directed path on a causal DAG is any path between the exposure and outcome where all of the arrows point towards the exposure. This is also referred to as a causal path")), "from exposure X (Ice-cream) to outcome Y (Sunburn), X → Y."
+"This hypothetical relationship is represented in the directed acyclic graph (DAG) by the", tags$span(style="color:#4FBAE4; font-weight:bold", tippy('directed path', tags$p(class='helpBox', "A directed path on a causal DAG is any path between the exposure and outcome where all of the arrows point towards the exposure. This is also referred to as a causal path"))), "from exposure X (Ice-cream) to outcome Y (Sunburn), X → Y."
 )
 ```
 
@@ -23,7 +23,7 @@ The doctor also knew that more people eat ice-cream on hot days and that sunburn
 
 ```{r}
 tags$p(
-'Combined, these assumptions result in a', tags$span(style="color:#4FBAE4; font-weight:bold", tippy('backdoor path', 'A backdoor path on a causal DAG is a path that connects the exposure and outcome where one or more arrows points backwards towards the exposure')), 'between ice-cream and sunburn X ← Z →Y. Backdoor paths are easy to spot on a causal DAG because one or more arrows on the path point back towards the exposure.'
+'Combined, these assumptions result in a', tags$span(style="color:#4FBAE4; font-weight:bold", tippy('backdoor path', tags$p(class='helpBox', 'A backdoor path on a causal DAG is a path that connects the exposure and outcome where one or more arrows points backwards towards the exposure'))), 'between ice-cream and sunburn X ← Z →Y. Backdoor paths are easy to spot on a causal DAG because one or more arrows on the path point back towards the exposure.'
 )
 ```
 This backdoor path is also considered open because it can transmit statistical association: any observed correlation between eating ice-cream and sunburn could be due to confounding by sunshine. To determine whether there is a causal effect of eating Ice-cream on Sunburn the doctor needs to close the backdoor path. 

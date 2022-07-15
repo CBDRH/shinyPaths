@@ -83,3 +83,8 @@
   margin-right: auto;
   width: 95%;
 }
+
+.helpBox {
+  font-size: 9pt;
+  text-align: left;
+}

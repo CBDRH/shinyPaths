@@ -17,6 +17,6 @@ tags$p(
   ")
 ```
 
-To isolate the direct effect, any causal pathways that include mediators must be closed (in addition to closing any open backdoor paths). Just like in the confounding example, a path with a mediator can be closed by controlling for the mediator.
+To isolate the direct effect, any causal paths that include mediators must be closed (in addition to closing any open backdoor paths). Just like in the confounding example, a path with a mediator can be closed by controlling for the mediator in the analysis.
 
 Enter your solution to identify the **direct** effect of exercise on mood.

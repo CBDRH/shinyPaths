@@ -11,4 +11,6 @@ library(shiny)
 
 ```
 
-Considering the same example, what would you adjust for to estimate the **direct** effect of Screen time on Obesity? 
+Considering the same example, what would you adjust for to estimate the **direct** effect of screen time on obesity? 
+
+Enter your solution and check the result. 

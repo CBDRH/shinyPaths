@@ -11,7 +11,7 @@ library(shiny)
 
 ```
 
-In this example, an emergency department doctor noted that patients presenting with severe sunburn often reported recently eating ice-cream. The doctor started to wonder _**Does eating ice-cream cause sunburn?**_
+Marie Freeman, an emergency department doctor, noted that patients presenting with severe sunburn often reported recently eating ice-cream. Marie started to wonder _**Does eating ice-cream cause sunburn?**_
 
 ```{r}
 tags$p(
@@ -19,15 +19,15 @@ tags$p(
 )
 ```
 
-The doctor also knew that more people eat ice-cream on hot days and that sunburn is more common on hot days too. Both of these assumptions are represented on the DAG too. The arrow X ← Z represents the effect of sunshine on ice-cream consumption and the arrow Z → Y represents the effect of sunshine on sunburn. Sunshine is a common cause of the exposure and outcome. In epidemiological terms we call this a confounder.
+Marie also knew that more people eat ice-cream on hot days and that sunburn is more common on hot days too. Both of these assumptions are represented on the DAG too. The arrow X ← Z represents the effect of sunshine on ice-cream consumption and the arrow Z → Y represents the effect of sunshine on sunburn. Sunshine is a common cause of the exposure and outcome. In epidemiological terms we call this a confounder.
 
 ```{r}
 tags$p(
-'Combined, these assumptions result in a', tags$span(style="color:#4FBAE4; font-weight:bold", tippy('backdoor path', tags$p(class='helpBox', 'A backdoor path on a causal DAG is a path that connects the exposure and outcome where one or more arrows points backwards towards the exposure'))), 'between ice-cream and sunburn X ← Z →Y. Backdoor paths are easy to spot on a causal DAG because one or more arrows on the path point back towards the exposure.'
+'Combined, these assumptions result in an open', tags$span(style="color:#4FBAE4; font-weight:bold", tippy('backdoor path', tags$p(class='helpBox', 'A backdoor path on a causal DAG is a path that connects the exposure and outcome where one or more arrows points backwards towards the exposure'))), 'between Ice-cream and Sunburn X ← Z →Y. Backdoor paths are easy to spot on a causal DAG because one or more arrows on the path point back towards the exposure.'
 )
 ```
-This backdoor path is also considered open because it can transmit statistical association: any observed correlation between eating ice-cream and sunburn could be due to confounding by sunshine. To determine whether there is a causal effect of eating Ice-cream on Sunburn the doctor needs to close the backdoor path. 
+This backdoor path is also considered open because it can transmit statistical association: any observed correlation between Ice-cream and Sunburn could be due to confounding by Sunshine. To determine whether there is a causal effect of Ice-cream on Sunburn Marie needs to close the backdoor path. 
 
-To close the backdoor path X ← Z → Y  the doctor must somehow control for Z in the analysis. In practice, there are many ways to do this. For example, by including the amount of sunshine received as a covariate in a regression analysis. 
+To close the backdoor path X ← Z → Y  Marie must somehow control for Z in the analysis. In practice, there are many ways to do this. For example, by including the amount of sunshine received as a covariate in a regression analysis. 
 
-Here in the daggle app you can click on a node to "control" for that variable. The node will change from a grey circle to a pink square to indicate that the variable should be controlled for in the analysis. So what would you have to control for to test the hypothesis that ice-cream sales cause sunburn? Enter your solution and check the result.
+Here in the daggle app you can click on a node to "control" for that variable. The node will change from a grey circle to a pink square to indicate that the variable should be controlled for in the analysis. So what should Marie control for to test the hypothesis that eating ice-cream cause sunburn? Enter your solution and check the result.

@@ -50,7 +50,7 @@ g4 <- 'dag {
     X -> Y
 }'
 
-label4 <- c("X" = "Smoking", "Y" = "COVID-19 Infection", "Z" = "Hospitalisation")
+label4 <- c("X" = "Smoking", "Y" = "Coronavirus", "Z" = "Hospitalisation")
 effect4 <- "total"
 
 # Example 5 from https://academic.oup.com/aje/article/176/10/938/92975
@@ -67,7 +67,7 @@ Z2 -> Y
 X -> Y
 }'
 
-label5 <- c("X" = "SSRI use", "Y" = "Lung cancer", "Z1" = "Depression", "Z2" = "Ever smoker", "Z3" = "Coronary disease")
+label5 <- c("X" = "SSRIs", "Y" = "Lung cancer", "Z1" = "Depression", "Z2" = "Smoking", "Z3" = "Coronary disease")
 effect5 <- "total"
 
 # Example 6 from https://www.nature.com/articles/s41390-018-0071-3
@@ -121,30 +121,31 @@ Z1 -> Y
 X -> Y
 }'
 
-label8 <- c("X" = "Childhood\nphysical abuse", "Y" = "Opioid\ndependency", "Z1" = "Chronic pain", "Z2" = "Unintentional\ninjury")
+label8 <- c("X" = "Childhood\nabuse", "Y" = "Opioid use\ndisorder", "Z1" = "Chronic pain", "Z2" = "Unintentional\ninjury")
 effect8 <- "direct"
 
 
-tuteNames <- c(
-  "Ice-cream and sunburn",
-  "Exercise and mood (1)",
-  "Exercise and mood (2)",
-  "Smoking and COVID19 hospitalisation",
-  "SSRI Use and lung cancer",
-  "Screen time and obesity (1)",
-  "Screen time and obesity (2)",
-  "Childhood abuse and opioid dependency"
+tuteNames <- list(
+  HTML(paste('Ice-cream and Sunburn', br(), shiny::helpText('Confounding'))),
+  HTML(paste('Exercise and Mood', br(), shiny::helpText('Mediation (Total effect)'))),
+  HTML(paste('Exercise and Mood', br(), shiny::helpText('Mediation (Direct effect)'))),
+  HTML(paste('Smoking and Coronavirus', br(), shiny::helpText('Collider Bias'))),
+  HTML(paste('SSRIs and Lung cancer', br(), shiny::helpText('M-bias'))),
+  HTML(paste('Screen time and Obesity', br(), shiny::helpText('A mixed example (Total effect)'))),
+  HTML(paste('Screen time and Obesity', br(), shiny::helpText('A mixed example (Direct effect)'))),
+  HTML(paste('Childhood abuse and Opioid use disorder', br(), shiny::helpText('A mixed example (Direct effect)')))
 )
 
+
 tuteHeaders <- c(
-  "Ice-cream 🍦and Sunburn ☀️- An example of confounding",
-  "Exercise 🏃and mood 🙂 - An example of mediation",
-  "Exercise 🏃and mood 🙂 - Direct effects in the presence of mediation",
-  "Smoking 🚬 and COVID-19 hospitalisation 🏥 - A collider example",
-  "SSRI use 💊 and lung cancer 🫁 - an example of M-bias",
-  "Screen time 💻 and obesity 🍟 - Total effect",
-  "Screen time 💻 and obesity 🍟 - Direct effect",
-  "Childhood abuse and opioid dependency"
+  "Ice-cream 🍦and Sunburn ☀️- An example of Confounding",
+  "Exercise 🏃and Mood 🙂 - An example of Mediation (Total effect)",
+  "Exercise 🏃and Mood 🙂 - An example of Mediation (Direct effect)",
+  "Smoking 🚬 and Coronavirus 🦠 - An example of Collider Bias",
+  "SSRI use 💊 and lung cancer 🫁 - An example of M-bias",
+  "Screen time 💻 and obesity 🍟 - A mixed example (Total effect)",
+  "Screen time 💻 and obesity 🍟 - A mixed example (Direct effect)",
+  "Childhood abuse and opioid use disorder - A mixed example (Direct effect)"
 )
 
 nExamples <- length(tuteNames)

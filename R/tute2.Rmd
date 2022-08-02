@@ -15,11 +15,11 @@ Doctors often recommend to patients with depression that they should increase th
 
 This potential relationship is represented in the DAG by the directed arrow from exposure X (Exercise) to the outcome Y (Mood), X &rarr; Y.
 
-In this example, our DAG reflects the assumption that there are two ways that Exercise can improve Mood, either directly (X &rarr; Y) or indirectly via sleep quality (X &rarr; Z &rarr; Y). The variable sleep quality is called a mediator as we think it mediates the relationship between exercise and mood. Both of these paths are open because they transmit statistical association: if this DAG represents the true data generation mechanism then we would expect to see an association beween exercise and mood because (i) exercise affects mood directly and (ii) exercise affects sleep quality which in turn affects mood. 
+In this example, our DAG reflects the assumption that there are two ways that Exercise can improve Mood, either directly (X &rarr; Y) or indirectly via sleep quality (X &rarr; Z &rarr; Y). The variable sleep quality is called a mediator in this example---it is a variable on the causal path from the exposure to the outcome. 
 
 ```{r}
 tags$p(
-"If we are interested in the", tags$span(style="color:#4FBAE4; font-weight:bold", tippy('total effect', tags$p(class='helpBox', "The total effect of an exposure on an outcome includes direct effects like X → Y and indirect effects that pass thorugh one or more mediators, like X → Z → Y"))) , "of Exercise on Mood regardless of which pathways it occurs through then we should make sure the path including sleep quality remains open.")
+"If we are interested in the", tags$span(style="color:#4FBAE4; font-weight:bold", tippy('total effect', tags$p(class='helpBox', "The total effect of an exposure on an outcome includes direct effects like X → Y and indirect effects that pass thorugh one or more mediators, like X → Z → Y"))) , "of Exercise on Mood regardless of which path it occurs through then we should make sure the path including sleep quality remains open.")
 ```
 
 Enter your solution to identify the **total** effect of exercise on mood.

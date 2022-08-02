@@ -11,16 +11,16 @@ library(shiny)
 
 ```
 
-A GP practice has observed that the patients coming to the clinic with a positive COVID-19 infection are more likely to be smokers. They asked the question: _**Does smoking increase the risk of being infected with COVID-19?**_
+Noor Ahmed, an Infectious Diseases ward nurse, noticed that patients admitted with coronavirus disease were often smokers. Noor asked the question: _**Does smoking increase the risk of being infected with coronavirus?**_
 
-This potential relationship is represented in the DAG by the directed arrow from exposure X (Smoking) to outcome Y (COVID-19 infection), (X → Y).
+This potential relationship is represented in the DAG by the directed arrow from exposure X (Smoking) to outcome Y (Coronavirus), X → Y.
 
-When they were discussing the analysis the team considered whether they should adjust for hospitalisation as a confounder. One doctor argued that this was important as both smokers and people infected with COVID-19 have an increased risk of being hospitalised. Another doctor argued that as hospitalisation was a consequence of both diseases rather than a possible cause that hospitalisation was not technically a confounder.
+Noor considered whether they should adjust for hospitalisation as a confounder. One colleague argued that this was important as both smokers and people infected with coronavirus have an increased risk of being hospitalised. Another colleague argued that hospitalisation was a consequence of both diseases rather than a possible cause, so hospitalisation was not technically a confounder.
 
-When we look at the DAG we can see that both arrows point away from the exposure and outcome to the variable Z (Hospitalisation), (X → Z) and (Z ← Y). The path X → Z ←  Y  is a backdoor path between the exposure and outcome but importantly it is not an _open_ backdoor path. 
+When we look at the DAG we can see that both arrows point away from the exposure and outcome to the variable Z (Hospitalisation), X → Z and Z ← Y. The path X → Z ←  Y  is a backdoor path between the exposure and outcome but importantly it is not an _open_ backdoor path. 
 
-This is because here Z is a special type of variable known as a ‘Collider’, and paths with uncontrolled colliders are closed. Think of it like streams of water arriving at the same point from two directions, the streams collide and the water can't go anywhere, the pathway is blocked. 
+This is because here Z is a special type of variable known as a ‘Collider’, a variable that is caused by both the exposure and the outcome. Paths with uncontrolled colliders are closed such that no statistical association is transmitted along these paths. Think of it like streams of water arriving at the same point from two directions, the streams collide and the water can't go anywhere, the pathway is blocked. 
 
-If the doctors had decided to adjust for hospitalisation then they would have opened the backdoor pathway thus creating an alternate route for the association between smoking and COVID-19 infection and more importantly, introducing bias. This phenomenon is known as collider and happens more often than you would think.
+If the doctors had decided to adjust for hospitalisation then they would have opened the backdoor pathway thus creating an alternate route for the association between smoking and COVID-19 infection and more importantly, introducing bias. This phenomenon is known as collider bias or collider stratification bias and happens more often than you would think.
 
-So, what would we control for to test the hypothesis that smoking increases the risk of being hospitalised with COVID-19? Enter your solution and check the result. 
+So, what would we control for to test the hypothesis that smoking increases the risk of being infected with coronavirus? Enter your solution and check the result. 

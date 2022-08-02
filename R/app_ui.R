@@ -13,7 +13,7 @@ app_ui <- function(request) {
     navbarPage("daggle", id = "panel", selected = 'Random', 
 
   # Random mode               
-  tabPanel("Random", icon = icon('project-diagram'),
+  tabPanel("Random", icon = icon('diagram-project'),
 
         # Left hand column
         column(width = 3,
@@ -23,8 +23,8 @@ app_ui <- function(request) {
         # Central column
         column(width = 6,
                tags$div(style="text-align:center;", 
-                        actionButton("instructions", NULL, icon = icon('question-circle'), class = "download"),
-                        actionButton("settings", NULL, icon = icon('cog'), class = "download"),
+                        actionButton("instructions", NULL, icon = icon('circle-question'), class = "download"),
+                        actionButton("settings", NULL, icon = icon('gear'), class = "download"),
                         hr(class = 'myHr'),
                         uiOutput("directions"),
                         hr(class = 'myHr')
@@ -46,9 +46,9 @@ app_ui <- function(request) {
                hr(class = 'myHr'),
                br(),
                tags$div(style="text-align:center;",
-                 actionButton("run", "Generate DAG", icon = icon('sync'), width = 140),
-                 actionButton("submit", "Submit answer", icon = icon('share-square'), width = 140),
-                 actionButton("reveal", "Reveal solution", icon = icon('project-diagram'), width = 140)
+                 actionButton("run", "Generate DAG", icon = icon('rotate'), width = 140),
+                 actionButton("submit", "Submit answer", icon = icon('share-from-square'), width = 140),
+                 actionButton("reveal", "Reveal solution", icon = icon('diagram-project'), width = 140)
                )
         ),
 
@@ -59,7 +59,7 @@ app_ui <- function(request) {
     ),
 
   # Tutorial mode
-  tabPanel("Tutorial", icon = icon('chalkboard-teacher'),
+  tabPanel("Tutorial", icon = icon('person-chalkboard'),
 
          tags$div(style="text-align:center;",   
             uiOutput("tuteHeader")
@@ -84,8 +84,8 @@ app_ui <- function(request) {
                 tags$div(style = 'text-align: center;',
                          actionButton('previous', NULL, icon = icon("arrow-left"), width = 68),
                          actionButton('advance', NULL, icon = icon("arrow-right"), width = 68),
-                         actionButton("submit2", "Submit answer", icon = icon('share-square'), width = 140),
-                         actionButton("reveal2", "Reveal solution", icon = icon('project-diagram'), width = 140),
+                         actionButton("submit2", "Submit answer", icon = icon('share-from-square'), width = 140),
+                         actionButton("reveal2", "Reveal solution", icon = icon('diagram-project'), width = 140),
                          br(), br()
                 )
                 ),
@@ -99,7 +99,7 @@ app_ui <- function(request) {
 
 
   # About section
-  tabPanel(NULL, icon = icon('info-circle'), p("Hidden for peer review"))
+  tabPanel(NULL, icon = icon('circle-info'), p("Hidden for peer review"))
   
     )
 )

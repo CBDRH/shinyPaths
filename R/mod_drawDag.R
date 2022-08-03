@@ -10,13 +10,19 @@
 #' @importFrom dplyr mutate case_when
 #' @importFrom ggplot2 ggplot aes ggproto guides guide_legend scale_color_manual scale_shape_manual scale_fill_manual ggsave theme
 #' @importFrom ggdag ggdag adjust_for geom_dag_point geom_dag_edges geom_dag_collider_edges geom_dag_text theme_dag geom_dag_label_repel scale_adjusted dag_label node_status
-mod_drawDag_ui <- function(id){
+#' @importFrom shinycssloaders withSpinner
+mod_drawDag_ui <- function(id, spinner = FALSE){
   ns <- NS(id)
   tagList(
     tags$div(style="text-align:right;",
       tags$div(style="display:inline-block;",title="Download as .png", downloadButton(ns("download"), NULL, class = "download"))
     ),
-      plotOutput(ns("plot"), click = "plotClick")
+    
+      if(spinner == TRUE){
+        withSpinner(plotOutput(ns("plot"), click = "plotClick"), type = 6, color = adjustedCol)
+      } else {
+        plotOutput(ns("plot"), click = "plotClick")
+      }
     )
 }
     
@@ -80,7 +86,7 @@ mod_drawDag_server <- function(id, did, dag, n, pid, label = 0, colliderlines = 
         output$plot <- renderPlot({
           req(dagPlot())
           dagPlot()
-          })
+          }, width = 600, height = 400)
         
         # Download the current
         output$download <- downloadHandler(

@@ -83,10 +83,11 @@ mod_drawDag_server <- function(id, did, dag, n, pid, label = 0, colliderlines = 
         })
     
         # Render the plot
+        
         output$plot <- renderPlot({
           req(dagPlot())
           dagPlot()
-          }, width = 600, height = 400)
+          }, width = 600, height = 450)
         
         # Download the current
         output$download <- downloadHandler(

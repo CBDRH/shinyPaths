@@ -11,7 +11,7 @@ library(shiny)
 
 ```
 
-Marie Freeman, an emergency department doctor, noted that patients presenting with severe sunburn often reported recently eating ice-cream. Marie started to wonder _**Does eating ice-cream cause sunburn?**_
+Marie Freeman, an emergency department triage nurse, noted that patients presenting with severe sunburn often reported recently eating ice-cream. Marie started to wonder _**Does eating ice-cream cause sunburn?**_
 
 ```{r}
 tags$p(
@@ -19,7 +19,7 @@ tags$p(
 )
 ```
 
-Marie also knew that more people eat ice-cream on hot days and that sunburn is more common on hot days too. Both of these assumptions are represented on the DAG too. The arrow X ← Z represents the effect of sunshine on ice-cream consumption and the arrow Z → Y represents the effect of sunshine on sunburn. Sunshine is a common cause of the exposure and outcome. In epidemiological terms we call this a confounder.
+Marie also knew that more people eat ice-cream on sunny days and that sunburn is more common on sunny days too. Both of these assumptions are represented on the DAG. The arrow X ← Z represents the effect of sunshine on ice-cream consumption and the arrow Z → Y represents the effect of sunshine on sunburn. Sunshine is a common cause of the exposure and outcome. In epidemiological terms we call this a confounder.
 
 ```{r}
 tags$p(

@@ -13,7 +13,7 @@ library(shiny)
 
 ```{r}
 tags$p(
-  "In some cases, researchers might be interested in isolating the", tags$span(style="color:#4FBAE4; font-weight:bold", tippy("direct effect", tags$p(class='helpBox', "The direct effect is the portion of the total effect that goes directly from the exposure to the outcome (X → Y) rather than being mediated through some other variable"))), "of an exposure on an outcome, or quantifying how much of the total effect passes through a given mediator.
+  "In order to quantify how much of the effect of exercise on mood was attributable to sleep quality, Grace would need to compare the total effect to the ", tags$span(style="color:#4FBAE4; font-weight:bold", tippy("direct effect", tags$p(class='helpBox', "The direct effect is the portion of the total effect that goes directly from the exposure to the outcome (X → Y) rather than being mediated through some other variable"))), "of exercise on mood.
   ")
 ```
 

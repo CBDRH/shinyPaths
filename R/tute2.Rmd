@@ -11,15 +11,13 @@ library(shiny)
 
 ```
 
-Doctors often recommend to patients with depression that they should increase their exercise to help improve mood. One question we could ask here is _**Does exercise improve mood by improving sleep quality?**_ 
+Dr Grace Chen, a general practitioner, often found that regular exercise helped to improve mood among patients with mood disorders like depression. Grace decided to explore the research question _**How does exercise improve mood?**_ 
 
-This potential relationship is represented in the DAG by the directed arrow from exposure X (Exercise) to the outcome Y (Mood), X &rarr; Y.
-
-In this example, our DAG reflects the assumption that there are two ways that Exercise can improve Mood, either directly (X &rarr; Y) or indirectly via sleep quality (X &rarr; Z &rarr; Y). The variable sleep quality is called a mediator in this example---it is a variable on the causal path from the exposure to the outcome. 
+This DAG reflects the assumption that there are two ways that Exercise can improve Mood, either directly (X &rarr; Y) or indirectly via sleep quality (X &rarr; Z &rarr; Y). The variable sleep quality is called a mediator in this example---it is a variable on the causal path from the exposure to the outcome. 
 
 ```{r}
 tags$p(
-"If we are interested in the", tags$span(style="color:#4FBAE4; font-weight:bold", tippy('total effect', tags$p(class='helpBox', "The total effect of an exposure on an outcome includes direct effects like X → Y and indirect effects that pass thorugh one or more mediators, like X → Z → Y"))) , "of Exercise on Mood regardless of which path it occurs through then we should make sure the path including sleep quality remains open.")
+"If Grace was interested in the", tags$span(style="color:#4FBAE4; font-weight:bold", tippy('total effect', tags$p(class='helpBox', "The total effect of an exposure on an outcome includes direct effects like X → Y and indirect effects that pass thorugh one or more mediators, like X → Z → Y"))) , "of Exercise on Mood regardless of which path it occurs through then she should make sure the path including sleep quality remains open in her analysis.")
 ```
 
 Enter your solution to identify the **total** effect of exercise on mood.

@@ -1,21 +1,21 @@
 
 
 
-<p>Marie Freeman, an emergency department doctor, noted that patients presenting with severe sunburn often reported recently eating ice-cream. Marie started to wonder <em><strong>Does eating ice-cream cause sunburn?</strong></em></p>
+<p>Marie Freeman, an emergency department triage nurse, noted that patients presenting with severe sunburn often reported recently eating ice-cream. Marie started to wonder <em><strong>Does eating ice-cream cause sunburn?</strong></em></p>
 <p>
 This hypothetical relationship is represented in the directed acyclic graph (DAG) by the
 <span style="color:#4FBAE4; font-weight:bold">
-<span id="htmlwidget-4a432428d53dab7d3ba1" class="tippy html-widget" width="960" height="500"></span>
-<script type="application/json" data-for="htmlwidget-4a432428d53dab7d3ba1">{"x":{"opts":{"content":"<p class=\"helpBox\">A directed path on a causal DAG is any path between the exposure and outcome where all of the arrows point towards the exposure. This is also referred to as a causal path<\/p>"},"text":"directed path"},"evals":[],"jsHooks":[]}</script>
+<span id="htmlwidget-744826a2f8d9cf10947a" class="tippy html-widget" width="960" height="500"></span>
+<script type="application/json" data-for="htmlwidget-744826a2f8d9cf10947a">{"x":{"opts":{"content":"<p class=\"helpBox\">A directed path on a causal DAG is any path between the exposure and outcome where all of the arrows point towards the exposure. This is also referred to as a causal path<\/p>"},"text":"directed path"},"evals":[],"jsHooks":[]}</script>
 </span>
 from exposure X (Ice-cream) to outcome Y (Sunburn), X → Y.
 </p>
-<p>Marie also knew that more people eat ice-cream on hot days and that sunburn is more common on hot days too. Both of these assumptions are represented on the DAG too. The arrow X ← Z represents the effect of sunshine on ice-cream consumption and the arrow Z → Y represents the effect of sunshine on sunburn. Sunshine is a common cause of the exposure and outcome. In epidemiological terms we call this a confounder.</p>
+<p>Marie also knew that more people eat ice-cream on sunny days and that sunburn is more common on sunny days too. Both of these assumptions are represented on the DAG. The arrow X ← Z represents the effect of sunshine on ice-cream consumption and the arrow Z → Y represents the effect of sunshine on sunburn. Sunshine is a common cause of the exposure and outcome. In epidemiological terms we call this a confounder.</p>
 <p>
 Combined, these assumptions result in an open
 <span style="color:#4FBAE4; font-weight:bold">
-<span id="htmlwidget-943e3bbd18567ca1c394" class="tippy html-widget" width="960" height="500"></span>
-<script type="application/json" data-for="htmlwidget-943e3bbd18567ca1c394">{"x":{"opts":{"content":"<p class=\"helpBox\">A backdoor path on a causal DAG is a path that connects the exposure and outcome where one or more arrows points backwards towards the exposure<\/p>"},"text":"backdoor path"},"evals":[],"jsHooks":[]}</script>
+<span id="htmlwidget-1a2d63fcf91fc272ae26" class="tippy html-widget" width="960" height="500"></span>
+<script type="application/json" data-for="htmlwidget-1a2d63fcf91fc272ae26">{"x":{"opts":{"content":"<p class=\"helpBox\">A backdoor path on a causal DAG is a path that connects the exposure and outcome where one or more arrows points backwards towards the exposure<\/p>"},"text":"backdoor path"},"evals":[],"jsHooks":[]}</script>
 </span>
 between Ice-cream and Sunburn X ← Z →Y. Backdoor paths are easy to spot on a causal DAG because one or more arrows on the path point back towards the exposure.
 </p>

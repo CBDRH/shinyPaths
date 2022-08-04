@@ -30,7 +30,7 @@ app_ui <- function(request) {
                         hr(class = 'myHr')
                ),
                
-               mod_drawDag_ui("drawDag_ui_1", spinner = TRUE),
+               mod_drawDag_ui("dag1", spinner = FALSE),
                
                tags$div(style="text-align:right;",
                         tags$div(style="display:inline-block",title="Get the code", actionButton("code", NULL, icon = icon('code'), class = "download")),
@@ -75,7 +75,7 @@ app_ui <- function(request) {
 
          # Central column
          column(width = 5, 
-                mod_drawDag_ui("drawDag_ui_3", spinner = TRUE),
+                mod_drawDag_ui("dag3", spinner = FALSE),
                 tags$div(style="text-align:center;",
                     strong("Your solution:"),
                     textOutput("printSelected2", inline = TRUE)

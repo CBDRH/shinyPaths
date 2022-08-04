@@ -6,6 +6,22 @@
 #' @noRd
 app_server <- function( input, output, session ) {
 
+  # Capture dimensions of viewport for DAG plots
+  dimension <- reactiveValues()
+  observe({
+    
+    dimension$height1 <- session$clientData[["output_dag1-plot_height"]]
+    dimension$width1 <- session$clientData[["output_dag1-plot_width"]]
+    dimension$height2 <- session$clientData[["output_dag2-plot_height"]]
+    dimension$width2 <- session$clientData[["output_dag2-plot_width"]]
+    dimension$height3 <- session$clientData[["output_dag3-plot_height"]]
+    dimension$width3 <- session$clientData[["output_dag3-plot_width"]]
+    dimension$height4 <- session$clientData[["output_dag4-plot_height"]]
+    dimension$width4 <- session$clientData[["output_dag4-plot_width"]]
+    
+  })  
+  
+  
   # set up reactive values pid = NULL, 
   rv <- reactiveValues(n = 5, p = '0.6', effect = 'total', id = NULL, solutionChoice = 1)
   
@@ -285,10 +301,10 @@ observeEvent(input$solutionID, {
     dag2() %>% adjust_for(dagSolution2()[[1]])
   })
   
-  mod_drawDag_server("drawDag_ui_1", dagAdj1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid)) # Random DAG
-  mod_drawDag_server("drawDag_ui_2", dagSolved1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), colliderlines = 1) # Random DAG solution
-  mod_drawDag_server("drawDag_ui_3", dagAdj2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1) # Tutorial DAG
-  mod_drawDag_server("drawDag_ui_4", dagSolved2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1) # Tutorial DAG solution
+  mod_drawDag_server("dag1", dagAdj1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), height = reactive(dimension$height1), width = reactive(dimension$width1)) # Random DAG
+  mod_drawDag_server("dag2", dagSolved1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), colliderlines = 1, height = reactive(dimension$height2), width = reactive(dimension$width2)) # Random DAG solution
+  mod_drawDag_server("dag3", dagAdj2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1, height = reactive(dimension$height3), width = reactive(dimension$width3)) # Tutorial DAG
+  mod_drawDag_server("dag4", dagSolved2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1, height = reactive(dimension$height4), width = reactive(dimension$width4)) # Tutorial DAG solution
 
   # Make the code available on click
   observeEvent(input$code, {
@@ -540,11 +556,11 @@ observeEvent(input$submit2, {
                               pointsize = 10)
     
     showModal(modalDialog(
-      title = HTML(paste(icon('project-diagram'), 'Solution')),
+      title = HTML(paste(icon('diagram-project'), 'Solution')),
       tagList(
         htmlOutput("solutionOpts"),
         htmlOutput("solutionText"),
-        mod_drawDag_ui("drawDag_ui_2")
+        mod_drawDag_ui("dag2")
       ),
       easyClose = TRUE,
       fade = TRUE,
@@ -623,13 +639,13 @@ observeEvent(input$submit2, {
     }
     # 
     showModal(modalDialog(
-      title = HTML(paste(icon('project-diagram'), 'Solution')),
+      title = HTML(paste(icon('diagram-project'), 'Solution')),
       tagList(
         h4(HTML((paste("Minimal adjustment sets to estimate the",
                        tags$strong(eval(as.name(paste0("effect", input$tuteID)))),
                        "effect of X on Y")))),
         p(text),
-        mod_drawDag_ui("drawDag_ui_4")
+        mod_drawDag_ui("dag4")
       ),
       easyClose = TRUE,
       fade = TRUE, 

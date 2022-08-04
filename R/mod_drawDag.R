@@ -29,7 +29,7 @@ mod_drawDag_ui <- function(id, spinner = FALSE){
 #' drawDag Server Functions
 #'
 #' @noRd 
-mod_drawDag_server <- function(id, did, dag, n, pid, label = 0, colliderlines = 0){
+mod_drawDag_server <- function(id, did, dag, n, pid, label = 0, colliderlines = 0, height, width){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
         
@@ -87,7 +87,12 @@ mod_drawDag_server <- function(id, did, dag, n, pid, label = 0, colliderlines = 
         output$plot <- renderPlot({
           req(dagPlot())
           dagPlot()
-          }, width = 600, height = 450)
+          }, width = function(){ # ensures that the height isn't unavailable when a modal containing a plot is first launched. Avoids the invalid quartz device size error.
+            ifelse(is.null(width()), 400, 'auto')
+          },
+          height = function(){
+            ifelse(is.null(height()), 400, 'auto')
+          })
         
         # Download the current
         output$download <- downloadHandler(

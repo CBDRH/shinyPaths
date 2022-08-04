@@ -5,9 +5,9 @@ account: cbdrh
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5480649
-bundleId: 6097244
+bundleId: 6160472
 url: https://cbdrh.shinyapps.io/daggle/
-when: 1657782312.59043
-lastSyncTime: 1657782312.59045
+when: 1659501702.86276
+lastSyncTime: 1659501702.86277
 asMultiple: FALSE
 asStatic: FALSE

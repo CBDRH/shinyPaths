@@ -13,7 +13,7 @@ library(shiny)
 
 Dr Linda Goodes, a paediatric dietitian, read a news article reporting that the prevalence of obesity is increasing among children and wondered whether this could relate to greater time spent using screen-based devices such as computers, tablets and mobile phones. 
 
-Linda decided to explore the research question _**Does an increasing amount of Screen time cause Obesity?**_
+Linda decided to explore the research question _**Does an increasing amount of screen time cause obesity?**_
 
 This potential relationship is represented in the DAG by the directed arrow from exposure X (Screen time) to outcome Y (Obesity), X → Y.
 

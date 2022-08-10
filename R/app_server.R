@@ -301,8 +301,8 @@ observeEvent(input$solutionID, {
     dag2() %>% adjust_for(dagSolution2()[[1]])
   })
   
-  mod_drawDag_server("dag1", dagAdj1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), height = reactive(dimension$height1), width = reactive(dimension$width1)) # Random DAG
-  mod_drawDag_server("dag2", dagSolved1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), colliderlines = 1, height = reactive(dimension$height2), width = reactive(dimension$width2)) # Random DAG solution
+  mod_drawDag_server("dag1", dagAdj1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), height = reactive(dimension$height1), width = reactive(dimension$width1), progressbar = TRUE) # Random DAG
+  mod_drawDag_server("dag2", dagSolved1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), height = reactive(dimension$height2), width = reactive(dimension$width2)) # Random DAG solution
   mod_drawDag_server("dag3", dagAdj2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1, height = reactive(dimension$height3), width = reactive(dimension$width3)) # Tutorial DAG
   mod_drawDag_server("dag4", dagSolved2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1, height = reactive(dimension$height4), width = reactive(dimension$width4)) # Tutorial DAG solution
 
@@ -426,7 +426,7 @@ observeEvent(input$submit, {
                                  text = learnr::random_praise(),
                                  br(),
                                  br(),
-                                 actionButton("run2", "Generate DAG", icon = icon('sync'), width = 140, class="btn btn-default"),
+                                 actionButton("run2", "Generate DAG", icon = icon('arrows-rotate'), width = 140, class="btn btn-default"),
                                  actionButton("link2", "Get url", icon = icon('link'), width = 140, class="btn btn-default"),
                                  tags$a(href=twitterLink(), "Share", class="btn btn-default twitter-share-button", icon("twitter"), target = "_blank")
                                )),

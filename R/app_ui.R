@@ -30,7 +30,7 @@ app_ui <- function(request) {
                         hr(class = 'myHr')
                ),
                
-               mod_drawDag_ui("dag1", spinner = FALSE),
+               mod_drawDag_ui("dag1"),
                
                tags$div(style="text-align:right;",
                         tags$div(style="display:inline-block",title="Get the code", actionButton("code", NULL, icon = icon('code'), class = "download")),

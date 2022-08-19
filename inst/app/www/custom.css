@@ -36,9 +36,60 @@
 .twitter-share-button {
   background-color: #1DA1F2; /* Twitter Blue */
   color: white;
-  padding: 6px 0px;
+  padding: 6px 0;
   text-align: center;
   width: 140px;
+}
+
+#run2 {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc !important;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  margin: 10px;
+}
+
+#run2:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #8c8c8c !important;
+}
+
+#link2 {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc !important;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  margin:10px;
+}
+
+#link2:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #8c8c8c !important;
 }
 
 .myHr {

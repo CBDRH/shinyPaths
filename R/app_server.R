@@ -6,7 +6,28 @@
 #' @noRd
 app_server <- function( input, output, session ) {
 
-  # Capture dimensions of viewport for DAG plots
+  # Show loading screen
+  observeEvent(rv$start, {
+    
+    n <- floor(runif(1, 1, 4))
+    introGif <- paste0("www/tutorial-gifs-", n, ".gif")
+    
+    hints <- c("Controlling for a confounder closes the path",
+               "Controlling for a mediator closes the path",
+               "Controlling for a collider opens the path")
+    
+    hint <- hints[n]
+    
+    shinyalert::shinyalert(title = 'Loading...', imageUrl = 'www/daggle-logo.png', 
+                           imageWidth = 300, imageHeight = 120, closeOnEsc = TRUE, closeOnClickOutside = TRUE,
+                           timer = 4000, showConfirmButton = FALSE, html = TRUE, size = 'm',
+                           text = tagList(shiny::h3(paste0("Hint #", n)),
+                                           shiny::helpText(hint),
+                                           tags$img(src = introGif, width=400))
+                           )
+  }, once = TRUE)
+  
+  # Capture dimensions of viewport for DAG plotstimer = 2000, 
   dimension <- reactiveValues()
   observe({
     
@@ -23,7 +44,7 @@ app_server <- function( input, output, session ) {
   
   
   # set up reactive values pid = NULL, 
-  rv <- reactiveValues(n = 5, p = '0.6', effect = 'total', id = NULL, solutionChoice = 1)
+  rv <- reactiveValues(n = 5, p = '0.6', effect = 'total', id = NULL, solutionChoice = 1, start = 1)
   
   observe({
     rv$pid <- ifelse(is.null(rv$pid), s1, rv$pid) 
@@ -301,7 +322,7 @@ observeEvent(input$solutionID, {
     dag2() %>% adjust_for(dagSolution2()[[1]])
   })
   
-  mod_drawDag_server("dag1", dagAdj1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), height = reactive(dimension$height1), width = reactive(dimension$width1), progressbar = TRUE) # Random DAG
+  mod_drawDag_server("dag1", dagAdj1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), height = reactive(dimension$height1), width = reactive(dimension$width1)) # Random DAG
   mod_drawDag_server("dag2", dagSolved1, did = reactive(rv$id), n = reactive(rv$n), pid = reactive(rv$pid), height = reactive(dimension$height2), width = reactive(dimension$width2)) # Random DAG solution
   mod_drawDag_server("dag3", dagAdj2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1, height = reactive(dimension$height3), width = reactive(dimension$width3)) # Tutorial DAG
   mod_drawDag_server("dag4", dagSolved2, did = reactive(rv$id), n = reactive(5), pid = reactive(rv$pid), label = 1, height = reactive(dimension$height4), width = reactive(dimension$width4)) # Tutorial DAG solution
@@ -418,33 +439,49 @@ observeEvent(input$submit, {
     mark <- grade[[1]]
 
     if(mark == TRUE) {
+      
+      shinyalert::shinyalert(title =  paste('Correct', emo::ji('happy'), tags$hr()),
+                             text = div(style = "text-align: center; display:inline-block",
+                                        tagList(
+                                         tags$p(learnr::random_praise()),
+                                         tags$div(style = 'background-color: red;',
+                                         actionButton("run2", "Generate DAG", icon = icon('arrows-rotate'), width = 140, class="btn btn-default", className='popupButton'),
+                                         actionButton("link2", "Get url", icon = icon('link'), width = 140, class="btn btn-default"),
+                                         tags$a(href=twitterLink(), "Share", class="btn btn-default twitter-share-button", icon("twitter"), target = "_blank")
+                                         ))
+                                        ),
+                             animation = FALSE,
+                             showConfirmButton = FALSE,
+                             closeOnClickOutside = TRUE,
+                             closeOnEsc = TRUE,
+                             html = TRUE,
+                             size = 'l')
 
-      exhaltation <- sample(encouragementList, 1)
-
-      showModal(modalDialog(title = div(style = "text-align: center; font-size: 22pt;", paste('Correct!', emo::ji('happy'), '\n')),
-                            div(style = "text-align: center;", tagList(
-                                 text = learnr::random_praise(),
-                                 br(),
-                                 br(),
-                                 actionButton("run2", "Generate DAG", icon = icon('arrows-rotate'), width = 140, class="btn btn-default"),
-                                 actionButton("link2", "Get url", icon = icon('link'), width = 140, class="btn btn-default"),
-                                 tags$a(href=twitterLink(), "Share", class="btn btn-default twitter-share-button", icon("twitter"), target = "_blank")
-                               )),
-                            easyClose = TRUE,
-                            fade = TRUE
-      ))
+      # showModal(modalDialog(title = div(style = "text-align: center; font-size: 22pt;", paste('Correct!', emo::ji('happy'), '\n')),
+      #                       div(style = "text-align: center;", tagList(
+      #                            text = learnr::random_praise(),
+      #                            br(),
+      #                            br(), 
+      #                            actionButton("run2", "Generate DAG", icon = icon('arrows-rotate'), width = 140, class="btn btn-default"),
+      #                            actionButton("link2", "Get url", icon = icon('link'), width = 140, class="btn btn-default"),
+      #                            tags$a(href=twitterLink(), "Share", class="btn btn-default twitter-share-button", icon("twitter"), target = "_blank")
+      #                          )),
+      #                       easyClose = TRUE,
+      #                       fade = TRUE
+      # ))
 
     }
     else if (mark == FALSE){
 
-      shinyalert::shinyalert(title =  paste('Incorrect', emo::ji('sad'), '\n'),
-                             text = learnr::random_encouragement(),
+      shinyalert::shinyalert(title =  paste('Incorrect', emo::ji('sad'), tags$hr()),
+                             text = tagList(tags$p(learnr::random_encouragement())),
                              animation = FALSE,
                              showConfirmButton = FALSE,
                              className = "alert",
-                             timer = 600,
+                             timer = 1500,
                              closeOnClickOutside = TRUE,
-                             closeOnEsc = TRUE)
+                             closeOnEsc = TRUE,
+                             html = TRUE)
 
     }
 

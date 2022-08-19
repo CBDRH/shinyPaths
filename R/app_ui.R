@@ -5,12 +5,13 @@
 #' @import shiny
 #' @noRd
 app_ui <- function(request) {
+  
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
     shinyjs::useShinyjs(),
-    navbarPage("daggle", id = "panel", selected = 'Random', 
+    navbarPage("daggle", id = "panel", selected = 'Random',
 
   # Random mode               
   tabPanel("Random", icon = icon('diagram-project'),
@@ -100,7 +101,6 @@ app_ui <- function(request) {
 
   # About section
   tabPanel(NULL, icon = icon('circle-info'), p("Hidden for peer review"))
-  
     )
 )
 }

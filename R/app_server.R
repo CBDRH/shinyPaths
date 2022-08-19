@@ -9,19 +9,22 @@ app_server <- function( input, output, session ) {
   # Show loading screen
   observeEvent(rv$start, {
     
-    n <- floor(runif(1, 1, 4))
-    introGif <- paste0("www/tutorial-gifs-", n, ".gif")
-    
-    hints <- c("Controlling for a confounder closes the path",
+    hints <- c("Break long paths into triplets and examine each triplet in turn",
+               "Controlling for a confounder closes the path",
                "Controlling for a mediator closes the path",
-               "Controlling for a collider opens the path")
+               "Controlling for a collider opens the path",
+               "Closing one path can sometimes open another path",
+               "For a minimal adjustment set, just choose one")
+    
+    n <- floor(runif(1, 1, length(hints)+1))
+    introGif <- paste0("www/tutorial-gifs-", n, ".gif")
     
     hint <- hints[n]
     
     shinyalert::shinyalert(title = 'Loading...', imageUrl = 'www/daggle-logo.png', 
                            imageWidth = 300, imageHeight = 120, closeOnEsc = TRUE, closeOnClickOutside = TRUE,
                            timer = 4000, showConfirmButton = FALSE, html = TRUE, size = 'm',
-                           text = tagList(shiny::h3(paste0("Hint #", n)),
+                           text = tagList( shiny::h3(paste0("Tip #", n)),
                                            shiny::helpText(hint),
                                            tags$img(src = introGif, width=400))
                            )
@@ -42,13 +45,12 @@ app_server <- function( input, output, session ) {
     
   })  
   
-  
   # set up reactive values pid = NULL, 
   rv <- reactiveValues(n = 5, p = '0.6', effect = 'total', id = NULL, solutionChoice = 1, start = 1)
   
-  observe({
-    rv$pid <- ifelse(is.null(rv$pid), s1, rv$pid) 
-  })
+    observe({
+      rv$pid <- ifelse(is.null(rv$pid), s1, rv$pid) 
+    })
 
   # Update settings if a unique id is supplied
   observeEvent(rv$id, {
@@ -101,7 +103,30 @@ app_server <- function( input, output, session ) {
     updateRadioButtons(session, 'effect', selected = rv$effect)
     
     showModal(modalDialog(
-      title = HTML(paste(icon('cog'), "Settings")),
+      title = HTML(paste(icon('gear'), "Settings")),
+      numericInput("n", "Number of nodes", value = 5, min = 3, max = 8, step = 1),
+      selectInput("p", "Complexity", choices = c("Easy" = .4, "Moderate" = .6, "Difficult" = .8), selected = .6),
+      numericInput("pid", "Puzzle ID", NULL, step = 1, min = 100, max = 999),
+      radioButtons("effect", "Effect of interest", choices = c('Total effect of X on Y' = 'total', 'Direct effect of X on Y' = 'direct'), selected = 'total', inline = FALSE),
+      footer = tagList(div(style = "text-align:right;",
+                           actionButton("cancelSettings", "Cancel", icon = icon('window-close')),
+                           actionButton("saveSettings", "Save and run", icon = icon('save'))
+      )),
+      easyClose = FALSE,
+      fade = TRUE
+    ))
+  })  
+  
+  # Make the url available on click
+  observeEvent(input$settings2, {
+    
+    updateNumericInput(session, 'n', value = rv$n)
+    updateSelectInput(session, 'p', selected = rv$p)
+    updateNumericInput(session, 'pid', value = rv$pid)
+    updateRadioButtons(session, 'effect', selected = rv$effect)
+    
+    showModal(modalDialog(
+      title = HTML(paste(icon('gear'), "Settings")),
       numericInput("n", "Number of nodes", value = 5, min = 3, max = 8, step = 1),
       selectInput("p", "Complexity", choices = c("Easy" = .4, "Moderate" = .6, "Difficult" = .8), selected = .6),
       numericInput("pid", "Puzzle ID", NULL, step = 1, min = 100, max = 999),
@@ -147,23 +172,24 @@ app_server <- function( input, output, session ) {
     
     showModal(modalDialog(
       title = HTML(paste(icon('question-circle'), "How to play")),
-      HTML(paste("The aim is to identify a minimal adjustment set to identify the effect of an exposure", 
+      HTML(paste0(tags$h3('Welcome to daggle!'),
+                  "The aim is to identify the smallest possible adjustment set to obtain an unbiased estimate of the effect of an exposure ", 
                    tags$span(class='xNode', "X"),
-                   "on an outcome", 
+                   " on an outcome ", 
                    tags$span(class='yNode', "Y"), "."
                    )), 
 
-      p("Click or tap on a node to add that variable to the adjustment list. Click or tap on an adjusted variable to remove it from the list."),
+      p("Click or tap on a node to add a variable to the adjustment list. Click or tap on an adjusted node to remove it from the list."),
       
-      p("To estimate the total effect, a minimal adjusment set must close any open backdoor paths between X and Y. To estimate the direct effect you must also control for mediating variables between X and Y." ),
+      p("To estimate the total effect, a minimal adjustment set must close any open backdoor paths between X and Y. To estimate the direct effect you must also control for mediating variables between X and Y." ),
       
-      p('To check if a path is closed, split the path up into consecutive triplets and examine each triplet. If any triplet is closed the whole path is closed'),
+      p('To check if a path is closed, split the path up into consecutive triplets and examine each triplet. If any triplet is closed the whole path is closed.'),
       
       tags$img(class="center", src="www/dag-examples.png"),
       
-      p(HTML(paste("Click on the cog icon", span(style = "color: #ccc; font-weight: bold;", icon('cog')), "to change the number of nodes, the DAG complexity or the effect of interest
-                   (either the ", span(style = "color: black; background-color:white; font-weight: bold;", "total"), "effect or the",
-                   span(style = "color: black; background-color:white; font-weight: bold;", "direct"), "effect)."
+      p(HTML(paste0("Click on the gear icon", actionButton("settings2", NULL, icon = icon('gear'), class = "download"), "to change the number of nodes, the DAG complexity or the effect of interest
+                   (either the ", span(style = "color: black; background-color:white; font-weight: bold;", "total"), " effect or the ",
+                   span(style = "color: black; background-color:white; font-weight: bold;", "direct"), " effect)."
                    ))),
       
       footer = tagList(div(style = "text-align:right;",
@@ -444,31 +470,17 @@ observeEvent(input$submit, {
                              text = div(style = "text-align: center; display:inline-block",
                                         tagList(
                                          tags$p(learnr::random_praise()),
-                                         tags$div(style = 'background-color: red;',
                                          actionButton("run2", "Generate DAG", icon = icon('arrows-rotate'), width = 140, class="btn btn-default", className='popupButton'),
                                          actionButton("link2", "Get url", icon = icon('link'), width = 140, class="btn btn-default"),
                                          tags$a(href=twitterLink(), "Share", class="btn btn-default twitter-share-button", icon("twitter"), target = "_blank")
-                                         ))
+                                         )
                                         ),
                              animation = FALSE,
                              showConfirmButton = FALSE,
                              closeOnClickOutside = TRUE,
                              closeOnEsc = TRUE,
                              html = TRUE,
-                             size = 'l')
-
-      # showModal(modalDialog(title = div(style = "text-align: center; font-size: 22pt;", paste('Correct!', emo::ji('happy'), '\n')),
-      #                       div(style = "text-align: center;", tagList(
-      #                            text = learnr::random_praise(),
-      #                            br(),
-      #                            br(), 
-      #                            actionButton("run2", "Generate DAG", icon = icon('arrows-rotate'), width = 140, class="btn btn-default"),
-      #                            actionButton("link2", "Get url", icon = icon('link'), width = 140, class="btn btn-default"),
-      #                            tags$a(href=twitterLink(), "Share", class="btn btn-default twitter-share-button", icon("twitter"), target = "_blank")
-      #                          )),
-      #                       easyClose = TRUE,
-      #                       fade = TRUE
-      # ))
+                             size = 'm')
 
     }
     else if (mark == FALSE){
@@ -696,18 +708,4 @@ observeEvent(input$submit2, {
     removeModal()
   })
   
-  # Bookmarking
-  # Exclude certain parameters from bookmark
-  setBookmarkExclude(names = c("run", "reveal2", "instructions", "settings", "link", "previous", "panel", "submit", "tuteID", "submit2", "code", "reveal", "advance", "plotClick", "cancelSettings", "saveSettings", "n", "p", "pid", "pid2", "effect"))
-
-  # Save extra values when we bookmark
-  onBookmark(function(state) {
-    state$values$id <- rv$id
-  })
-
-  # Read values from state$values when we restore
-  onRestore(function(state) {
-    rv$id <- state$values$id
-  })
-
 } # Close app_server function

@@ -20,6 +20,7 @@ Imports:
     tippy,
     learnr,
     shinycssloaders,
+    ggtext,
     english (>= 1.2-6)
 Encoding: UTF-8
 LazyData: true

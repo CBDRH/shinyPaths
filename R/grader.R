@@ -21,7 +21,7 @@ commas <- function(solution){
 #'
 #' @param td 
 #'
-#' @return
+#' @return A message indicating whether the submission was wrong or right
 #'
 #' @examples
 #' sol <- list(c('Z1', 'Z2'), c('Z1', 'Z3'))

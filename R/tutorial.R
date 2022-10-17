@@ -126,14 +126,14 @@ effect8 <- "direct"
 
 
 tuteNames <- list(
-  HTML(paste('Ice-cream and Sunburn', br(), shiny::helpText('Confounding'))),
-  HTML(paste('Exercise and Mood', br(), shiny::helpText('Mediation (Total effect)'))),
-  HTML(paste('Exercise and Mood', br(), shiny::helpText('Mediation (Direct effect)'))),
-  HTML(paste('Smoking and Coronavirus', br(), shiny::helpText('Collider Bias'))),
-  HTML(paste('SSRIs and Lung cancer', br(), shiny::helpText('M-bias'))),
-  HTML(paste('Screen time and Obesity', br(), shiny::helpText('A mixed example (Total effect)'))),
-  HTML(paste('Screen time and Obesity', br(), shiny::helpText('A mixed example (Direct effect)'))),
-  HTML(paste('Childhood abuse and Opioid use disorder', br(), shiny::helpText('A mixed example (Direct effect)')))
+  shiny::HTML(paste('Ice-cream and Sunburn', shiny::br(), shiny::helpText('Confounding'))),
+  shiny::HTML(paste('Exercise and Mood', shiny::br(), shiny::helpText('Mediation (Total effect)'))),
+  shiny::HTML(paste('Exercise and Mood', shiny::br(), shiny::helpText('Mediation (Direct effect)'))),
+  shiny::HTML(paste('Smoking and Coronavirus', shiny::br(), shiny::helpText('Collider Bias'))),
+  shiny::HTML(paste('SSRIs and Lung cancer', shiny::br(), shiny::helpText('M-bias'))),
+  shiny::HTML(paste('Screen time and Obesity', shiny::br(), shiny::helpText('A mixed example (Total effect)'))),
+  shiny::HTML(paste('Screen time and Obesity', shiny::br(), shiny::helpText('A mixed example (Direct effect)'))),
+  shiny::HTML(paste('Childhood abuse and Opioid use disorder', shiny::br(), shiny::helpText('A mixed example (Direct effect)')))
 )
 
 

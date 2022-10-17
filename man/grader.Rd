@@ -10,7 +10,7 @@ grader(submission, solution)
 \item{td}{}
 }
 \value{
-
+A message indicating whether the submission was wrong or right
 }
 \description{
 grader

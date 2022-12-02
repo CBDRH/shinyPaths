@@ -1,25 +1,8 @@
-commas <- function(solution){
-  
-    l <- length(solution)
-    
-    if(l==1){
-      return(solution)
-    }
-    
-    else if(l==2){
-      return(paste(solution[1], "and", solution[2]))
-    }
-    
-    else (
-      return(paste(paste(solution[1:l-1], collapse = ", "), "and", solution[l]))
-    )
-    
-  }
-
-
 #' grader
 #'
-#' @param td 
+#' @param submission The submitted solution, a vector of nodes
+#' @param dag A string defining the causal DAG
+#' @param effect The desired effect, total (default) or direct
 #'
 #' @return A message indicating whether the submission was wrong or right
 #'
@@ -29,29 +12,53 @@ commas <- function(solution){
 #' guess2 <- c('Z1', 'Z2')
 #' grader(guess1, sol)
 #' grader(guess2, sol)
-grader <- function(submission, solution){
+grader <- function(submission, dag, effect = 'total'){
   
-  mark <- FALSE
-  message <- "Try again!"
-  nSol <- length(solution)
-  introText <- ifelse(nSol==1, "There was one solution", paste("There were", english::as.english(nSol), "solutions. Adust for:"))
+  stopifnot(dagitty::is.dagitty(dag))
+  stopifnot(effect %in% c('total', 'direct'))
   
-  if (length(solution[[1]]) == 0 & all.equal(0, length(submission))==TRUE) {
-    mark <- TRUE
-    message <- "No adjustment required!"
-  }
+  minSol <- dagitty::adjustmentSets(dag, type = 'minimal', effect = effect)
   
-  else if (length(solution[[1]]) > 0) {
+  mark <- 'incorrect'
+  minSolN <- length(minSol)
+
+  for (i in 1:minSolN) {
     
-    for (i in 1:nSol) {
-      
-      if (setequal(submission, solution[[i]])) {
-        mark <- TRUE
-        message <- solution[[i]]
-      }
-      
+    if (setequal(submission, minSol[[i]])) {
+      mark <- 'correct'
+    } 
+    
+  }  
+  
+  if (mark!='correct' & effect=='total') {
+    
+    allSol <- dagitty::adjustmentSets(dag, type = 'all', effect = effect)
+    allSolN <- length(allSol)
+    
+    for (i in 1:allSolN) {
+
+      if (setequal(submission, allSol[[i]])) {
+        mark <- 'close'
+      } 
+    
     }
+  
   }
   
-  return(c(mark, message))
+  return(mark)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

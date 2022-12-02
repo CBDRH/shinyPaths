@@ -22,7 +22,7 @@ drawDAG <- function(dag, adj=NULL){
   dag %>% 
     dagitty() %>% 
     adjust_for(adj) %>% 
-    node_status %>% 
+    node_status() %>% 
     mutate(col = factor(case_when(status=='exposure' ~ 1, 
                                   status=='outcome' ~ 2, 
                                   adjusted=='adjusted' ~ 3, 

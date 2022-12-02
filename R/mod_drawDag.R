@@ -126,7 +126,7 @@ test_drawDag <- function() {
   ui <- fluidPage(
     mod_drawDag_ui('dag1')
   )
-  server <- function(input, output, session) {
+  server <- function(input, output, session, width=0) {
     
     d <- randDAG(4, .6)
     

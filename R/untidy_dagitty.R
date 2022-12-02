@@ -22,6 +22,7 @@
 #' ud <- untidy_dagitty(tidyDag)
 #' plot(ud[["dagitty"]])
 #' ggdag(ud[["ggdag"]])
+
 untidy_dagitty <- function(td){
   
   stopifnot(ggdag::is.tidy_dagitty(td))
@@ -60,7 +61,7 @@ untidy_dagitty <- function(td){
   }
   
   outString2 <- sub('\n}\n"', '}"', outString2) 
-  outString2 <- paste0("dagitty::dagitty('", outString2, "')")
+  outString3 <- paste0("dagitty::dagitty('", outString2, "')")
   
-  return(list(dagitty = outString1, r = outString2))
+  return(list(dagitty = outString1, r = outString3, rString = outString2))
 }

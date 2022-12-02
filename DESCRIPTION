@@ -6,6 +6,9 @@ Description: Test your understanding of the backdoor path criterion.
 License: CC BY 4.0
 biocViews:
 Imports: 
+    dplyr,
+    ggplot2,
+    magrittr,
     config (>= 0.3.1),
     golem (>= 0.3.1),
     shiny (>= 1.6.0),

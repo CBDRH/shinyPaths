@@ -6,30 +6,205 @@
 #' @noRd
 app_server <- function( input, output, session ) {
 
-  # Show loading screen
-  observeEvent(rv$start, {
-    
-    hints <- c("Break long paths into triplets and examine each triplet in turn",
-               "Controlling for a confounder closes the path",
-               "Controlling for a mediator closes the path",
-               "Controlling for a collider opens the path",
-               "Closing one path can sometimes open another path",
-               "For a minimal adjustment set, just choose one")
-    
-    n <- floor(runif(1, 1, length(hints)+1))
-    introGif <- paste0("www/tutorial-gifs-", n, ".gif")
-    
-    hint <- hints[n]
-    
-    shinyalert::shinyalert(title = 'Loading...', imageUrl = 'www/daggle-logo.png', 
-                           imageWidth = 300, imageHeight = 120, closeOnEsc = TRUE, closeOnClickOutside = TRUE,
-                           timer = 4000, showConfirmButton = FALSE, html = TRUE, size = 'm',
-                           text = tagList( shiny::h3(paste0("Tip #", n)),
-                                           shiny::helpText(hint),
-                                           tags$img(src = introGif, width=400))
-                           )
-  }, once = TRUE)
+  currentDagString <- reactive({
+    codeSnip <- untidy_dagitty(dagAdj1())
+    return(codeSnip$rString)
+  })
   
+  currentPaths <- reactive({
+    getOpenPaths(dagitty::dagitty(currentDagString()), adj = rv$controls) 
+  })
+
+  output$pathHint <- renderUI({
+    
+    req(rv$effect)
+    
+    getHint(currentPaths(), rv$effect)    
+
+  })
+  
+  output$pathHighlight <- renderPlot({
+    
+    req(rv$path)
+    
+    drawPath(dag=dagitty::dagitty(currentDagString()), 
+             adj=rv$controls,
+             path=currentPaths()$path[rv$path],
+             open = currentPaths()$open[rv$path],
+             directed = currentPaths()$directed[rv$path])
+  })
+  
+  output$pathIndex <- renderUI({
+    
+    req(rv$path, currentPaths())
+    
+    helpText(paste0(rv$path, "/", nrow(currentPaths())))
+  })
+  
+  
+  observeEvent(input$hint, {
+    
+  rv$path <- 1  
+    
+  showModal(modalDialog(
+    title = NULL,
+    tagList(
+      tags$div(style = 'text-align: center;',
+               h3(paste('Hint', emo::ji('rocket'))),
+               helpText("You got this!"),
+               hr(),
+      ),
+      shinycssloaders::withSpinner(htmlOutput("pathHint"), 
+                                   type = 5, 
+                                   color = openCol, 
+                                   size = 1),
+      
+      shinycssloaders::withSpinner(htmlOutput("pathIndex"), 
+                                   type = 5, 
+                                   color = openCol, 
+                                   size = 1),
+      
+      tags$div(style = 'text-align: center;',
+               actionButton('previousPath', NULL, icon = icon("arrow-left"), width = 68),
+               actionButton('nextPath', NULL, icon = icon("arrow-right"), width = 68)
+      ),
+      shinycssloaders::withSpinner(plotOutput("pathHighlight"), 
+                                   type = 5, 
+                                   color = openCol, 
+                                   size = 1)
+    ),
+    easyClose = TRUE,
+    fade = TRUE,
+    footer = tagList(div(style = "text-align:right;", actionButton("closeHint", "Got it", icon = icon('thumbs-up'))))
+  ))
+  
+  })
+    
+  # Close solution modal on click
+  observeEvent(input$closeHint, {
+    removeModal()
+  })
+  
+  observeEvent(input$nextPath, {
+    rv$path <- ifelse(rv$path < nrow(currentPaths()), rv$path + 1, 1)
+  })
+  
+  observeEvent(input$previousPath, {
+    rv$path <- ifelse(rv$path > 1, rv$path - 1, nrow(currentPaths()))
+  })
+  
+  
+  
+  # Hint in tutorial section
+
+  # Current tutorial DAG 
+  currentDagString2 <- reactive({
+    req(input$tuteID)
+    codeSnip <- eval(as.name(paste0('g', input$tuteID)))
+    return(codeSnip)
+  })
+
+  # paths from current tutorial DAG
+  currentPaths2 <- reactive({
+    getOpenPaths(dagitty::dagitty(currentDagString2()), adj = rv$controls)
+  })
+
+  # Generate the hint
+  output$pathHint2 <- renderUI({
+    req(input$tuteID)
+    getHint(currentPaths2(), eval(as.name(paste0("effect", input$tuteID))))
+
+  })
+
+  # Plot highligted paths
+  output$pathHighlight2 <- renderPlot({
+    req(rv$path2)
+    drawPath(dag=dagitty::dagitty(currentDagString2()),
+             adj=rv$controls,
+             path=currentPaths2()$path[rv$path2],
+             open = currentPaths2()$open[rv$path2],
+             directed = currentPaths2()$directed[rv$path2])
+  })
+
+  # Keep track of path index
+  output$pathIndex2 <- renderUI({
+    helpText(paste0(rv$path2, "/", nrow(currentPaths2())))
+  })
+
+  
+  observeEvent(input$hint2, {
+    showModal(modalDialog(
+      title = NULL,
+      tagList(
+        tags$div(style = 'text-align: center;',
+                 h3(paste('Hint', emo::ji('rocket'))),
+                 helpText("You got this!"),
+                 hr(),
+        ),
+        shinycssloaders::withSpinner(htmlOutput("pathHint2"), 
+                                     type = 5, 
+                                     color = openCol, 
+                                     size = 1),
+        
+        shinycssloaders::withSpinner(htmlOutput("pathIndex2"), 
+                                     type = 5, 
+                                     color = openCol, 
+                                     size = 1),
+                                     
+        tags$div(style = 'text-align: center;',
+                 actionButton('previousPath2', NULL, icon = icon("arrow-left"), width = 68),
+                 actionButton('nextPath2', NULL, icon = icon("arrow-right"), width = 68)
+        ),
+        shinycssloaders::withSpinner(plotOutput("pathHighlight2"), 
+                                     type = 5, 
+                                     color = openCol, 
+                                     size = 1)
+      ),
+      easyClose = TRUE,
+      fade = TRUE,
+      footer = tagList(div(style = "text-align:right;", actionButton("closeHint2", "Got it", icon = icon('thumbs-up'))))
+    ))
+
+  })
+
+  # Close solution modal on click
+  observeEvent(input$closeHint2, {
+    removeModal()
+  })
+
+  observeEvent(input$nextPath2, {
+    rv$path2 <- ifelse(rv$path2 < nrow(currentPaths2()), rv$path2 + 1, 1)
+  })
+
+  observeEvent(input$previousPath2, {
+    rv$path2 <- ifelse(rv$path2 > 1, rv$path2 - 1, nrow(currentPaths2()))
+  })
+
+  
+  # Show loading screen
+  # observeEvent(rv$start, {
+  # 
+  #   hints <- c("Break long paths into triplets and examine each triplet in turn",
+  #              "Controlling for a confounder closes the path",
+  #              "Controlling for a mediator closes the path",
+  #              "Controlling for a collider opens the path",
+  #              "Closing one path can sometimes open another path",
+  #              "For a minimal adjustment set, just choose one")
+  # 
+  #   n <- floor(runif(1, 1, length(hints)+1))
+  #   introGif <- paste0("www/tutorial-gifs-", n, ".gif")
+  # 
+  #   hint <- hints[n]
+  # 
+  #   shinyalert::shinyalert(title = 'Loading...', imageUrl = 'www/daggle-logo.png',
+  #                          imageWidth = 300, imageHeight = 120, closeOnEsc = TRUE, closeOnClickOutside = TRUE,
+  #                          timer = 4000, showConfirmButton = FALSE, html = TRUE, size = 'm',
+  #                          text = tagList( shiny::h3(paste0("Tip #", n)),
+  #                                          shiny::helpText(hint),
+  #                                          tags$img(src = introGif, width=400))
+  #                          )
+  # }, once = TRUE)
+
   # Capture dimensions of viewport for DAG plotstimer = 2000, 
   dimension <- reactiveValues()
   observe({
@@ -46,7 +221,7 @@ app_server <- function( input, output, session ) {
   })  
   
   # set up reactive values pid = NULL, 
-  rv <- reactiveValues(n = 5, p = '0.6', effect = 'total', id = NULL, solutionChoice = 1, start = 1)
+  rv <- reactiveValues(n = 5, p = '0.6', effect = 'total', id = NULL, solutionChoice = 1, start = 1, path = 1, path2 = 1)
   
     observe({
       rv$pid <- ifelse(is.null(rv$pid), s1, rv$pid) 
@@ -110,7 +285,7 @@ app_server <- function( input, output, session ) {
       radioButtons("effect", "Effect of interest", choices = c('Total effect of X on Y' = 'total', 'Direct effect of X on Y' = 'direct'), selected = 'total', inline = FALSE),
       footer = tagList(div(style = "text-align:right;",
                            actionButton("cancelSettings", "Cancel", icon = icon('window-close')),
-                           actionButton("saveSettings", "Save and run", icon = icon('save'))
+                           actionButton("saveSettings", "Save and close", icon = icon('save'))
       )),
       easyClose = FALSE,
       fade = TRUE
@@ -133,7 +308,7 @@ app_server <- function( input, output, session ) {
       radioButtons("effect", "Effect of interest", choices = c('Total effect of X on Y' = 'total', 'Direct effect of X on Y' = 'direct'), selected = 'total', inline = FALSE),
       footer = tagList(div(style = "text-align:right;",
         actionButton("cancelSettings", "Cancel", icon = icon('window-close')),
-        actionButton("saveSettings", "Save and run", icon = icon('save'))
+        actionButton("saveSettings", "Save and close", icon = icon('save'))
       )),
       easyClose = FALSE,
       fade = TRUE
@@ -421,7 +596,7 @@ observeEvent(input$solutionID, {
   observeEvent(input$link2, {
     
     showModal(modalDialog(
-      title = "daggle url",
+      title = HTML(paste(icon('link'), "URL link to this daggle")),
       footer = modalButton("Done"),
       div(style="color:#4FBAE4; background-color:white;", url()),
       br(),
@@ -454,17 +629,14 @@ observeEvent(input$solutionID, {
 # Check solution in random mode
 observeEvent(input$submit, {
 
-    submission <- rv$controls
-
     solution <- dagSolution1()
     if (input$panel=="Tutorial") {
       solution <- dagSolution2()
       }
     nSol <- length(solution)
-    grade <- grader(submission, solution)
-    mark <- grade[[1]]
+    grade <- grader(submission = rv$controls, dag=dag1()$dag, effect = rv$effect)
 
-    if(mark == TRUE) {
+    if(grade == 'correct') {
       
       shinyalert::shinyalert(title =  paste('Correct', emo::ji('happy'), tags$hr()),
                              text = div(style = "text-align: center; display:inline-block",
@@ -483,10 +655,28 @@ observeEvent(input$submit, {
                              size = 'm')
 
     }
-    else if (mark == FALSE){
+    else if (grade == 'incorrect'){
 
-      shinyalert::shinyalert(title =  paste('Incorrect', emo::ji('sad'), tags$hr()),
-                             text = tagList(tags$p(learnr::random_encouragement())),
+      shinyalert::shinyalert(title =  paste('Incorrect', emo::ji('sad'), '\n'),
+                             text = tagList(
+                               helpText(learnr::random_encouragement()),
+                                       shiny::actionButton("hint", "Hint", icon = icon('question'), style="  color: #333;
+          background-color: #fff;
+          border-color: #ccc !important;
+          display: inline-block;
+          font-weight: 400;
+          text-align: center;
+          white-space: nowrap;
+          vertical-align: middle;
+          cursor: pointer;
+          background-image: none;
+          border: 1px solid;
+          padding: 6px 12px;
+          font-size: 14px;
+          line-height: 1.42857143;
+          border-radius: 4px;
+          margin: 10px;") # Had to hardcode this because actionButton css class isn't being recognised
+                               ),
                              animation = FALSE,
                              showConfirmButton = FALSE,
                              className = "alert",
@@ -494,9 +684,21 @@ observeEvent(input$submit, {
                              closeOnClickOutside = TRUE,
                              closeOnEsc = TRUE,
                              html = TRUE)
-
     }
 
+    else if (grade == 'close'){
+      
+      shinyalert::shinyalert(title =  paste('Close!', emo::ji('thinking'), tags$hr()),
+                             text = tagList(tags$p(HTML(paste("That is a valid adjustment set but it's not a", tags$em("minimal"), "adjustment set!")))),
+                             animation = FALSE,
+                             showConfirmButton = FALSE,
+                             className = "alert",
+                             timer = 4000,
+                             closeOnClickOutside = TRUE,
+                             closeOnEsc = TRUE,
+                             html = TRUE)
+      
+    }
 
 }, ignoreInit = TRUE)
   
@@ -521,10 +723,9 @@ observeEvent(input$submit2, {
 
   solution <- dagSolution2()
   nSol <- length(solution)
-  grade <- grader(submission, solution)
-  mark <- grade[[1]]
+  grade <- grader(submission = rv$controls, dag=dag2()$dag, effect = eval(as.name(paste0("effect", input$tuteID))))
 
-  if(mark == TRUE) {
+  if(grade == 'correct') {
 
     showModal(modalDialog(title = div(style = "text-align: center; font-size: 22pt;", paste('Correct!', emo::ji('happy'), '\n')),
                           div(style = "text-align: center;", tagList(
@@ -537,17 +738,51 @@ observeEvent(input$submit2, {
     ))
 
   }
-  else if (mark == FALSE){
+  
+  else if (grade == 'incorrect'){
 
     shinyalert::shinyalert(title =  paste('Incorrect', emo::ji('sad'), '\n'),
-                           text = learnr::random_encouragement(),
+                           text = tagList(
+                             helpText(learnr::random_encouragement()),
+                             shiny::actionButton("hint2", "Hint", icon = icon('question'), style="  color: #333;
+          background-color: #fff;
+          border-color: #ccc !important;
+          display: inline-block;
+          font-weight: 400;
+          text-align: center;
+          white-space: nowrap;
+          vertical-align: middle;
+          cursor: pointer;
+          background-image: none;
+          border: 1px solid;
+          padding: 6px 12px;
+          font-size: 14px;
+          line-height: 1.42857143;
+          border-radius: 4px;
+          margin: 10px;") # Had to hardcode this because actionButton css class isn't being recognised
+                           ),
                            animation = FALSE,
                            showConfirmButton = FALSE,
                            className = "alert",
-                           timer = 600,
+                           timer = 1500,
                            closeOnClickOutside = TRUE,
-                           closeOnEsc = TRUE)
-
+                           closeOnEsc = TRUE,
+                           html = TRUE)
+  }
+  
+  
+  else if (grade == 'close'){
+    
+    shinyalert::shinyalert(title =  paste('Close!', emo::ji('thinking'), tags$hr()),
+                           text = tagList(tags$p(HTML(paste("That is a valid answer set but it's not the", tags$em("minimal"), "adjustment set!")))),
+                           animation = FALSE,
+                           showConfirmButton = FALSE,
+                           className = "alert",
+                           timer = 1500,
+                           closeOnClickOutside = TRUE,
+                           closeOnEsc = TRUE,
+                           html = TRUE)
+    
   }
 
 
@@ -566,11 +801,14 @@ observeEvent(input$submit2, {
       tagList(
         h4(HTML((paste("Minimal adjustment sets to estimate the", tags$strong(rv$effect), "effect of X on Y")))),
         br(),
+        h5(ifelse(nSets==1, "There was one solution:", paste("There were", english::as.english(nSets), "solutions:"))),
+        br(),
         radioButtons("solutionID",
                      NULL,
                      choiceNames = choiceSolutions,
                      choiceValues = seq(1:nSets),
-                     selected = 1
+                     selected = 1,
+                     inline = TRUE
                      )
       )
 
@@ -582,12 +820,12 @@ observeEvent(input$submit2, {
     text <- if (length(dagSolution1()[[1]]) == 0) {
       "No adjustment necessary!"
     } else {
-      paste("Adjust for", knitr::combine_words(sort(dagSolution1()[[rv$solutionChoice]])))
+      paste0("Adjust for ", knitr::combine_words(sort(dagSolution1()[[rv$solutionChoice]])))
     }
     
     tagList(
       
-      p(text)
+      helpText(text)
     )
     
   })

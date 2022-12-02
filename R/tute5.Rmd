@@ -17,7 +17,7 @@ This potential relationship is represented in the DAG by the directed arrow from
 
 SSRIs are prescribed to treat Depression (Z1 → X) and Smoking is a leading cause of Lung cancer (Z2 → Y). Hanh had also read articles suggesting that Depression had an effect on Coronary disease (Z1 → Z3), as did Smoking (Z2 → Z3). 
 
-The resulting DAG has one backdoor path: X ← Z1 → Z3 ← Z2 → Y
+The resulting DAG has one non-causal path: X ← Z1 → Z3 ← Z2 → Y
 
 What should Hanh adjust for in her analysis to identify the total effect of SSRI use on lung cancer? 
 

@@ -11,7 +11,7 @@ library(shiny)
 
 ```
 
-Professor Hanh Nguyen, a public health epidemiologist, noticed that despite smoking rates decreasing over the last four decades the lung cancer rate had not declined. She wondered if there could be other causes of lung cancer and decided to test the hypothesis that maybe the increase in use of Selective Serotonin Reuptake Inhibitors (SSRIs) as a treatment for depression could explain the lung cancer rate. Her research question was: _**Do SSRIs increase the risk of developing lung cancer?**_ 
+Professor Hanh Ngo, a public health epidemiologist, noticed that despite smoking rates decreasing over the last four decades the lung cancer rate had not declined. She wondered if there could be other causes of lung cancer and decided to test the hypothesis that maybe the increase in use of Selective Serotonin Reuptake Inhibitors (SSRIs) as a treatment for depression could explain the lung cancer rate. Her research question was: _**Do SSRIs increase the risk of developing lung cancer?**_ 
 
 This potential relationship is represented in the DAG by the directed arrow from exposure X (SSRI use) to outcome Y (Lung Cancer), X → Y.
 

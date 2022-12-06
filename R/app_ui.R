@@ -137,7 +137,7 @@ mainPanel(style = "color: #333;
   
   h2(tags$span(id="resources", "Resources")),
   
-  helpText("This section provides a list of resources for people wising to learn mmore about DAGs. This list is biased towards applied health service research and R software. To add or amend this list please contact me or submit a pull request on GitHub."),
+  helpText("This section provides a list of resources for people wising to learn more about DAGs. This list is biased towards applied health service research and R software. To add or amend this list please contact me or submit a pull request on GitHub."),
   
   h3(tags$span(id="introductory", "Introductory tutorials")),
   

@@ -30,22 +30,22 @@ drawDAG <- function(dag, adj=NULL){
                         levels = 1:4,
                         labels = c('exposure', 'outcome', 'adjusted', 'unadjusted')
     )) %>% 
-    ggplot(aes(x = x, y = y, xend = xend, yend = yend, fill = col, shape = adjusted)) +
+    ggplot(aes(x = x, y = y, xend = xend, yend = yend, fill = col, shape=col)) +
     geom_dag_point(aes(color = col)) +
     geom_dag_edges(arrow_directed = grid::arrow(length = grid::unit(10, "pt"), type = "closed")) +
     geom_dag_text() +
     theme_dag(legend.position = 'bottom') +
-    guides(color = guide_legend(override.aes = list(size = 8))) +
+    #guides(color = guide_legend(override.aes = list(size = 8))) +
     scale_fill_manual(NULL,
                       values = c('exposure' = exposureCol, 'outcome' = outcomeCol, 'adjusted' = adjustedCol, 'unadjusted' = unadjustedCol),
                       labels = c('exposure' = 'Exposure', 'outcome' = 'Outcome', 'adjusted' = "Adjusted", 'unadjusted' = "Unadjusted"),
-                      na.value = naCol) +
+                      na.value = naCol, drop = FALSE) +
     scale_color_manual(NULL,
                        values = c('exposure' = exposureCol, 'outcome' = outcomeCol, 'adjusted' = adjustedCol, 'unadjusted' = unadjustedCol),
                        labels = c('exposure' = 'Exposure', 'outcome' = 'Outcome', 'adjusted' = "Adjusted", 'unadjusted' = "Unadjusted"),
-                       na.value = naCol) +
+                       na.value = naCol, drop = FALSE) +
     scale_shape_manual(NULL,
                        values = c('exposure' = 21, 'outcome' = 21, 'adjusted' = 22, 'unadjusted' = 21),
                        labels = c('exposure' = 'Exposure', 'outcome' = 'Outcome', 'adjusted' = "Adjusted", 'unadjusted' = "Unadjusted"),
-                       na.value = naCol)
+                       na.value = naCol, drop = FALSE)
 }

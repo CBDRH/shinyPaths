@@ -19,9 +19,9 @@
 ## to change the name in the app_sys() function in app_config.R /!\
 ## 
 golem::fill_desc(
-  pkg_name = "shinyPaths", # The Name of the package containing the App 
-  pkg_title = "shinyPaths", # The Title of the package containing the App 
-  pkg_description = "Test your understanding of the backdoor path criterion.", # The Description of the package containing the App 
+  pkg_name = "daggle", # The Name of the package containing the App 
+  pkg_title = "daggle", # The Title of the package containing the App 
+  pkg_description = "The daggle app—a tool to support learning and teaching the graphical rules of selecting adjustment variables using directed acyclic graphs (DAGs)", # The Description of the package containing the App 
   author_first_name = "Hanly", # Your First Name
   author_last_name = "Mark", # Your Last Name
   author_email = "m.hanly@unsw.edu.au", # Your Email

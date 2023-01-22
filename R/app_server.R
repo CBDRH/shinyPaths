@@ -23,7 +23,7 @@ app_server <- function( input, output, session ) {
     
     shinyalert::shinyalert(title = 'Loading...', imageUrl = 'www/daggle-logo.png', 
                            imageWidth = 300, imageHeight = 120, closeOnEsc = TRUE, closeOnClickOutside = TRUE,
-                           timer = 4000, showConfirmButton = FALSE, html = TRUE, size = 'm',
+                           showConfirmButton = TRUE, html = TRUE, size = 'm',
                            text = tagList( shiny::h3(paste0("Tip #", n)),
                                            shiny::helpText(hint),
                                            tags$img(src = introGif, width=400))
@@ -49,7 +49,7 @@ app_server <- function( input, output, session ) {
   rv <- reactiveValues(n = 5, p = '0.6', effect = 'total', id = NULL, solutionChoice = 1, start = 1)
   
     observe({
-      rv$pid <- ifelse(is.null(rv$pid), s1, rv$pid) 
+      rv$pid <- ifelse(is.null(rv$pid), s1, rv$pid)  # s1 random starting number set in colors.R
     })
 
   # Update settings if a unique id is supplied
@@ -706,6 +706,20 @@ observeEvent(input$submit2, {
   # Close tutorial solution modal on click
   observeEvent(input$closeSolution2, {
     removeModal()
+  })
+  
+  # Bookmarking
+  # Exclude certain parameters from bookmark
+  setBookmarkExclude(names = c("run", "reveal2", "instructions", "settings", "link", "previous", "panel", "submit", "tuteID", "submit2", "code", "reveal", "advance", "plotClick", "cancelSettings", "saveSettings", "n", "p", "pid", "pid2", "effect"))
+  
+  # Save extra values when we bookmark
+  onBookmark(function(state) {
+    state$values$id <- rv$id
+  })
+  
+  # Read values from state$values when we restore
+  onRestore(function(state) {
+    rv$id <- state$values$id
   })
   
 } # Close app_server function
